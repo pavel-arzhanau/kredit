@@ -3,6 +3,7 @@ import { getStore } from "@netlify/blobs";
 
 const COOKIE = "kredit_edit";
 const STORE = "kredit-200000";
+const EDIT_PASSWORD = "guan";
 const MAX_BODY = 300000;
 const MAX_PAYMENTS = 2000;
 
@@ -42,8 +43,7 @@ function json(data, status, cookie) {
 }
 
 function password() {
-  const value = process.env.EDIT_PASSWORD || "";
-  return value.length >= 4 ? value : "";
+  return EDIT_PASSWORD;
 }
 
 function sessionToken(secret) {

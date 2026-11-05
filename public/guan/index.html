@@ -103,15 +103,6 @@
   <main>
     <h1>Кредит на жильё: план и факт</h1>
     <p class="sub muted" id="subtitle"></p>
-
-    <div class="planbar" id="authbar">
-      <p class="note muted small" id="auth-status">Загрузка журнала…</p>
-      <form class="row" id="login-form" hidden>
-        <label>Пароль правок<input id="login-password" type="password" autocomplete="current-password" required /></label>
-        <button class="primary" type="submit">Войти</button>
-      </form>
-      <button type="button" id="logout" hidden>Закончить правки</button>
-    </div>
     <p class="err small" id="auth-error"></p>
 
     <div class="planbar">
@@ -145,7 +136,7 @@
 
     <section class="journal">
       <h2>Журнал фактических платежей</h2>
-      <p class="muted small">Сумма — это списание со счёта. Если банк включил в него комиссию за СМС, оставьте галочку: эти копейки не уменьшают долг. На сайте журнал общий. С диска он остаётся только в этом браузере.</p>
+      <p class="muted small">Сумма — это списание со счёта. Если банк включил в него комиссию за СМС, оставьте галочку: эти копейки не уменьшают долг. Добавление, удаление и правка один раз за сессию браузера спрашивают пароль.</p>
       <form class="row" id="pay-form">
         <label>Дата<input id="pay-date" class="date" type="date" required /></label>
         <label>Сумма, BYN<input id="pay-amount" class="money" inputmode="decimal" required autocomplete="off" /></label>
@@ -199,6 +190,8 @@
 "use strict";
 
 /** Платежи, которые я дописываю в файл. При смене SEED_REV они заменяют одноимённые записи в браузере. */
+const EDIT_PASSWORD = "guan";
+const EDIT_SESSION = "guan-edit";
 const SEED_REV = 1;
 const SEEDED_PAYMENTS = [];
 const STORAGE_KEY = "kredit-200000-2026-11-04";
@@ -1203,7 +1196,6 @@ function render() {
     (minimum.state.balance === 0
       ? `<p>Обязательный график без досрочки: ${minimum.rows.length} ${plural(minimum.rows.length, "платёж", "платежа", "платежей")} до ${esc(longDate(minEnd))}, проценты ${esc(money(minimum.state.cumInterest))} BYN${minimum.state.cumSms ? `, СМС ${esc(money(minimum.state.cumSms))} BYN` : ""}.</p>`
       : "");
-  lockForms();
 }
 
 function planIntegrity(plan, amountKop) {
@@ -1323,46 +1315,51 @@ let booting = true;
 let updatedAt = null;
 let saveQueue = Promise.resolve();
 
-function canEdit() {
-  return !booting && (!remote || editor);
-}
 function setAuthError(text) {
   const el = document.getElementById("auth-error");
   if (el) el.textContent = text || "";
 }
-function lockForms() {
-  const locked = !canEdit();
-  for (const id of ["monthly", "set-amount", "set-start", "set-day", "set-rate1", "set-rate2", "set-days", "set-grace", "set-years", "set-base", "set-sms", "pay-date", "pay-amount", "pay-note", "pay-sms", "pay-submit", "import", "reset-settings", "clear-journal"]) {
-    const el = document.getElementById(id);
-    if (el) el.disabled = locked;
-  }
-  document.querySelectorAll("#journal button").forEach((button) => { button.disabled = locked; });
+function editUnlocked() {
+  try { return sessionStorage.getItem(EDIT_SESSION) === "1"; }
+  catch (e) { return false; }
 }
-function updateAuthUi() {
-  const status = document.getElementById("auth-status");
-  const form = document.getElementById("login-form");
-  const logout = document.getElementById("logout");
-  if (booting) {
-    status.textContent = "Загрузка журнала…";
-    form.hidden = true;
-    logout.hidden = true;
-    lockForms();
-    return;
+function rememberEdit() {
+  try { sessionStorage.setItem(EDIT_SESSION, "1"); }
+  catch (e) { /* приватный режим может запретить sessionStorage */ }
+}
+function forgetEdit() {
+  editor = false;
+  try { sessionStorage.removeItem(EDIT_SESSION); }
+  catch (e) { /* сессия и так закроется вместе с вкладкой */ }
+}
+async function openServerSession() {
+  await api("/api/session", {
+    method: "POST",
+    body: JSON.stringify({ password: EDIT_PASSWORD }),
+  });
+  editor = true;
+}
+async function ensureEdit() {
+  if (booting) return false;
+  if (!editUnlocked()) {
+    const value = prompt("Пароль для добавления, удаления и правки");
+    if (value == null) return false;
+    if (value !== EDIT_PASSWORD) {
+      alert("Неверный пароль.");
+      return false;
+    }
+    rememberEdit();
   }
-  if (!remote) {
-    status.textContent = "Файл открыт с диска: журнал только в этом браузере. На сайте его видят оба, а правки закрыты паролем.";
-    form.hidden = true;
-    logout.hidden = true;
-  } else if (editor) {
-    status.textContent = "Правки включены, пока браузер не закрыт. После выхода или закрытия браузера пароль спросится снова.";
-    form.hidden = true;
-    logout.hidden = false;
-  } else {
-    status.textContent = "Цифры общие. Добавлять, менять и удалять можно после пароля — он держится одну сессию браузера.";
-    form.hidden = false;
-    logout.hidden = true;
+  if (remote && !editor) {
+    try {
+      await openServerSession();
+    } catch (error) {
+      forgetEdit();
+      alert(error.message || "Не удалось открыть правки.");
+      return false;
+    }
   }
-  lockForms();
+  return true;
 }
 async function api(path, options) {
   const res = await fetch(path, Object.assign({ credentials: "include" }, options || {}, {
@@ -1404,9 +1401,8 @@ async function pushState() {
     setAuthError("");
   } catch (error) {
     if (error.status === 401) {
-      editor = false;
-      setAuthError("Сессия закончилась. Войдите снова: последняя правка не сохранилась.");
-      updateAuthUi();
+      forgetEdit();
+      setAuthError("Не удалось сохранить. Повторите действие: пароль спросится снова.");
       return;
     }
     if (error.status === 409) {
@@ -1457,8 +1453,11 @@ function readSettingsFromForm() {
     sms: document.getElementById("set-sms").value,
   });
 }
-function commitSettings() {
-  if (!canEdit()) return;
+async function commitSettings() {
+  if (!(await ensureEdit())) {
+    fillForms();
+    return;
+  }
   const parsed = readSettingsFromForm();
   const err = document.getElementById("settings-error");
   if (parsed.error) {
@@ -1482,9 +1481,9 @@ function boot() {
     document.getElementById(id).addEventListener("input", scheduleCommit);
     document.getElementById(id).addEventListener("change", commitSettings);
   }
-  document.getElementById("pay-form").addEventListener("submit", (event) => {
+  document.getElementById("pay-form").addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (!canEdit()) return;
+    if (!(await ensureEdit())) return;
     const date = parseISO(document.getElementById("pay-date").value);
     const amountKop = parseMoney(document.getElementById("pay-amount").value);
     const note = document.getElementById("pay-note").value.trim();
@@ -1529,10 +1528,10 @@ function boot() {
     document.getElementById("pay-submit").textContent = "Добавить";
     document.getElementById("pay-cancel").hidden = true;
   });
-  document.getElementById("journal").addEventListener("click", (event) => {
+  document.getElementById("journal").addEventListener("click", async (event) => {
     const btn = event.target.closest("button");
     if (!btn) return;
-    if (!canEdit()) return;
+    if (!(await ensureEdit())) return;
     const id = btn.closest("[data-id]").dataset.id;
     if (btn.dataset.act === "del") {
       const item = app.payments.find((p) => p.id === id);
@@ -1569,11 +1568,10 @@ function boot() {
     setTimeout(() => URL.revokeObjectURL(a.href), 1500);
   });
   document.getElementById("import").addEventListener("click", () => document.getElementById("import-file").click());
-  document.getElementById("import-file").addEventListener("change", () => {
-    if (!canEdit()) return;
+  document.getElementById("import-file").addEventListener("change", async () => {
     const file = document.getElementById("import-file").files[0];
     document.getElementById("import-file").value = "";
-    if (!file) return;
+    if (!file || !(await ensureEdit())) return;
     const reader = new FileReader();
     reader.onload = () => {
       let data;
@@ -1592,8 +1590,8 @@ function boot() {
     };
     reader.readAsText(file);
   });
-  document.getElementById("reset-settings").addEventListener("click", () => {
-    if (!canEdit()) return;
+  document.getElementById("reset-settings").addEventListener("click", async () => {
+    if (!(await ensureEdit())) return;
     if (!confirm("Вернуть сумму, ставки, даты и платёж 3 500 BYN? Журнал не сотрётся.")) return;
     const payments = app.payments;
     const deletedIds = app.deletedIds;
@@ -1604,8 +1602,8 @@ function boot() {
     save();
     render();
   });
-  document.getElementById("clear-journal").addEventListener("click", () => {
-    if (!canEdit()) return;
+  document.getElementById("clear-journal").addEventListener("click", async () => {
+    if (!(await ensureEdit())) return;
     if (!app.payments.length) return;
     if (!confirm("Удалить все фактические платежи из журнала?")) return;
     editingId = null;
@@ -1617,48 +1615,23 @@ function boot() {
     save();
     render();
   });
-  document.getElementById("login-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    setAuthError("");
-    try {
-      await api("/api/session", {
-        method: "POST",
-        body: JSON.stringify({ password: document.getElementById("login-password").value }),
-      });
-      editor = true;
-      document.getElementById("login-password").value = "";
-      updateAuthUi();
-      render();
-    } catch (error) {
-      setAuthError(error.message || "Неверный пароль.");
-    }
-  });
-  document.getElementById("logout").addEventListener("click", async () => {
-    try { await api("/api/session", { method: "DELETE" }); } catch (e) { /* выход локально всё равно закрывает правки */ }
-    editor = false;
-    updateAuthUi();
-    render();
-  });
 }
 
 async function start() {
   fillForms();
   render();
-  updateAuthUi();
   boot();
   try {
-    const [state, session] = await Promise.all([api("/api/state"), api("/api/session")]);
+    const state = await api("/api/state");
     remote = true;
-    editor = !!session.editor;
     applyRemoteState(state);
+    if (editUnlocked()) await openServerSession();
   } catch (e) {
     remote = false;
-    editor = true;
   }
   booting = false;
   fillForms();
   render();
-  updateAuthUi();
 }
 
 start();

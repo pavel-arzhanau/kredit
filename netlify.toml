@@ -1,5 +1,4 @@
-# Пароль правок задаётся в Netlify: Site configuration → Environment variables → EDIT_PASSWORD.
-# В каталог сайта попадает только public/. Остальные файлы из personal не публикуются.
+# Страница публикуется по пути /guan. Пароль правок зашит в страницу и в функцию.
 
 [build]
   publish = "public"
@@ -31,7 +30,13 @@
     Referrer-Policy = "no-referrer"
     X-Robots-Tag = "noindex, nofollow"
 
+[[redirects]]
+  from = "/"
+  to = "/guan/"
+  status = 302
+  force = true
+
 [[headers]]
-  for = "/"
+  for = "/guan/*"
   [headers.values]
     Cache-Control = "no-cache"
