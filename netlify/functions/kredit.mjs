@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { getStore } from "@netlify/blobs";
+import { connectLambda, getStore } from "@netlify/blobs";
 
 const COOKIE = "kredit_edit";
 const STORE = "kredit-200000";
@@ -13,7 +13,7 @@ export async function handler(event) {
     if (event.httpMethod === "GET" && path === "/api/session") return json({ editor: authed(event) });
     if (event.httpMethod === "DELETE" && path === "/api/session") return logout(event);
     if (event.httpMethod === "POST" && path === "/api/session") return login(event);
-    const store = getStore({ name: STORE, consistency: "strong" });
+    const store = storeFor(event);
     if (event.httpMethod === "GET" && path === "/api/state") return json(await readState(store));
     if (event.httpMethod === "PUT" && path === "/api/state") return putState(event, store);
     return json({ error: "Не найдено." }, 404);
@@ -30,6 +30,11 @@ function routeOf(event) {
   if (path === marker) return "/api";
   if (path.startsWith(marker + "/")) return "/api" + path.slice(marker.length);
   return path;
+}
+
+function storeFor(event) {
+  connectLambda(event);
+  return getStore({ name: STORE, consistency: "strong" });
 }
 
 function json(data, status, cookie) {
@@ -109,7 +114,7 @@ async function login(event) {
   if (sameText(body.password || "", secret)) {
     return json({ editor: true }, 200, sessionCookie(event, sessionToken(secret)));
   }
-  const store = getStore({ name: STORE, consistency: "strong" });
+  const store = storeFor(event);
   const ip = clientIp(event);
   const lockKey = "lock:" + createHmac("sha256", "kredit-lock").update(ip).digest("hex").slice(0, 24);
   const row = (await store.get(lockKey, { type: "json" })) || { fails: 0, until: 0 };
