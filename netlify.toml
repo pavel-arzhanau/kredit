@@ -1,4 +1,4 @@
-# Страница публикуется по пути /guan. Пароль правок зашит в страницу и в функцию.
+# Страница открывается с корня сайта. Пароль правок проверяет функция, в страницу он не вписан.
 
 [build]
   publish = "public"
@@ -31,12 +31,16 @@
     X-Robots-Tag = "noindex, nofollow"
 
 [[redirects]]
-  from = "/"
-  to = "/guan/"
-  status = 302
-  force = true
+  from = "/guan"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/guan/"
+  to = "/"
+  status = 301
 
 [[headers]]
-  for = "/guan/*"
+  for = "/"
   [headers.values]
     Cache-Control = "no-cache"
