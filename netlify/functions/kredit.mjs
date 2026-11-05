@@ -10,12 +10,12 @@ const MAX_PAYMENTS = 2000;
 export async function handler(event) {
   try {
     const path = routeOf(event);
+    if (event.httpMethod === "GET" && path === "/api/session") return json({ editor: authed(event) });
+    if (event.httpMethod === "DELETE" && path === "/api/session") return logout(event);
+    if (event.httpMethod === "POST" && path === "/api/session") return login(event);
     const store = getStore({ name: STORE, consistency: "strong" });
     if (event.httpMethod === "GET" && path === "/api/state") return json(await readState(store));
     if (event.httpMethod === "PUT" && path === "/api/state") return putState(event, store);
-    if (event.httpMethod === "GET" && path === "/api/session") return json({ editor: authed(event) });
-    if (event.httpMethod === "POST" && path === "/api/session") return login(event, store);
-    if (event.httpMethod === "DELETE" && path === "/api/session") return logout(event);
     return json({ error: "Не найдено." }, 404);
   } catch (error) {
     console.error(error);
@@ -101,24 +101,24 @@ function clientIp(event) {
     || "local";
 }
 
-async function login(event, store) {
+async function login(event) {
   const secret = password();
   if (!secret) return json({ error: "Пароль правок не задан в настройках сайта." }, 503);
+  let body = {};
+  try { body = JSON.parse(event.body || "{}"); } catch (e) { body = {}; }
+  if (sameText(body.password || "", secret)) {
+    return json({ editor: true }, 200, sessionCookie(event, sessionToken(secret)));
+  }
+  const store = getStore({ name: STORE, consistency: "strong" });
   const ip = clientIp(event);
   const lockKey = "lock:" + createHmac("sha256", "kredit-lock").update(ip).digest("hex").slice(0, 24);
   const row = (await store.get(lockKey, { type: "json" })) || { fails: 0, until: 0 };
   if (row.until > Date.now()) return json({ error: "Слишком много попыток. Подождите 15 минут." }, 429);
-  let body = {};
-  try { body = JSON.parse(event.body || "{}"); } catch (e) { body = {}; }
-  if (!sameText(body.password || "", secret)) {
-    const fails = (row.until && row.until < Date.now() ? 0 : row.fails) + 1;
-    const until = fails >= 8 ? Date.now() + 15 * 60 * 1000 : 0;
-    await store.setJSON(lockKey, { fails: until ? 0 : fails, until });
-    await new Promise((resolve) => setTimeout(resolve, 300));
-    return json({ error: "Неверный пароль." }, 401);
-  }
-  await store.delete(lockKey);
-  return json({ editor: true }, 200, sessionCookie(event, sessionToken(secret)));
+  const fails = (row.until && row.until < Date.now() ? 0 : row.fails) + 1;
+  const until = fails >= 8 ? Date.now() + 15 * 60 * 1000 : 0;
+  await store.setJSON(lockKey, { fails: until ? 0 : fails, until });
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  return json({ error: "Неверный пароль." }, 401);
 }
 
 function logout(event) {
@@ -154,6 +154,9 @@ function cleanSettings(raw) {
   const rate1 = Number(raw.rate1);
   const rate2 = Number(raw.rate2);
   const paymentDay = Number(raw.paymentDay);
+  const dueRule = raw.dueRule === "fixedDay" ? "fixedDay" : "lastBusinessDay";
+  const firstInterestStart = validDate(raw.firstInterestStart) ? raw.firstInterestStart : raw.start;
+  const principalMonths = Number(raw.principalMonths);
   const preferentialDays = Number(raw.preferentialDays);
   const graceMonths = Number(raw.graceMonths);
   const termYears = Number(raw.termYears);
@@ -166,14 +169,18 @@ function cleanSettings(raw) {
   if (!Number.isInteger(graceMonths) || graceMonths < 0 || graceMonths > 120) return null;
   if (!Number.isInteger(termYears) || termYears < 1 || termYears > 40) return null;
   if (!validDate(raw.start)) return null;
+  if (!Number.isInteger(principalMonths) || principalMonths < 1 || principalMonths > termYears * 12) return null;
   return {
     amount,
     start: raw.start,
     paymentDay,
+    dueRule,
+    firstInterestStart,
     rate1,
     rate2,
     preferentialDays,
     graceMonths,
+    principalMonths,
     termYears,
     yearBase: Number(raw.yearBase) === 360 ? 360 : 365,
     monthly,

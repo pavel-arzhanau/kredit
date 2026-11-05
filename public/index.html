@@ -632,44 +632,21 @@ function readStore() {
   catch (e) { return null; }
 }
 function load() {
-  const saved = readStore();
-  const savedPays = saved && Array.isArray(saved.payments) ? saved.payments : [];
-  const revChanged = !saved || saved.seedRev !== SEED_REV;
-  const deleted = new Set(revChanged ? [] : (saved?.deletedIds || []));
-  const seedIds = new Set(SEEDED_PAYMENTS.map((p) => p.id));
-  const map = new Map();
-  for (const p of SEEDED_PAYMENTS) {
-    const n = normalizePayment(p);
-    if (n && (revChanged || !deleted.has(n.id))) map.set(n.id, n);
-  }
-  for (const p of savedPays) {
-    const n = normalizePayment(p);
-    if (!n || deleted.has(n.id)) continue;
-    if (revChanged && seedIds.has(n.id)) continue;
-    map.set(n.id, n);
-  }
-  const settings = Object.assign({}, DEFAULT_SETTINGS, saved?.settings || {});
-  if (saved?.settings?.yearBase === 360) settings.yearBase = 360;
   return {
-    settings,
-    payments: [...map.values()].sort(comparePay),
-    deletedIds: [...deleted],
+    settings: Object.assign({}, DEFAULT_SETTINGS),
+    payments: [],
+    deletedIds: [],
   };
 }
 function comparePay(a, b) {
   return a.date < b.date ? -1 : a.date > b.date ? 1 : a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 }
 function save() {
-  if (remote && !editor) return;
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      seedRev: SEED_REV,
-      settings: app.settings,
-      payments: app.payments,
-      deletedIds: app.deletedIds,
-    }));
-  } catch (e) { /* браузер может запретить хранилище */ }
-  if (remote) queuePush();
+  if (!remote || !editor) {
+    setAuthError("Сервер журнала недоступен или сессия правок закончилась. Изменения не сохранены.");
+    return;
+  }
+  queuePush();
 }
 
 function svgEl(name, attrs) {
@@ -1351,7 +1328,11 @@ function forgetEdit() {
 }
 async function ensureEdit() {
   if (booting) return false;
-  if (!remote || editor) return true;
+  if (!remote) {
+    setAuthError("Сервер журнала недоступен. Правки заблокированы, чтобы не потерять данные.");
+    return false;
+  }
+  if (editor) return true;
   const value = prompt("Пароль для добавления, удаления и правки");
   if (value == null) return false;
   try {
@@ -1416,7 +1397,13 @@ async function pushState() {
       setAuthError("Журнал уже изменён в другом окне. Обновите страницу, чтобы не затереть запись.");
       return;
     }
-    setAuthError(error.message || "Не удалось сохранить.");
+    remote = false;
+    forgetEdit();
+    app = load();
+    updatedAt = null;
+    setAuthError((error.message || "Не удалось сохранить.") + " Правки заблокированы; запись не считается сохранённой.");
+    fillForms();
+    render();
   }
 }
 
@@ -1630,6 +1617,10 @@ async function start() {
     applyRemoteState(state);
   } catch (e) {
     remote = false;
+    editor = false;
+    app = load();
+    updatedAt = null;
+    setAuthError((e.message || "Журнал недоступен.") + " Просмотр и правки отключены, чтобы не использовать локальное сохранение.");
   }
   booting = false;
   fillForms();
