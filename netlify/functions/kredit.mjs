@@ -1,5 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { connectLambda, getStore } from "@netlify/blobs";
+import { getStore } from "@netlify/blobs";
 
 const COOKIE = "kredit_edit";
 const STORE = "kredit-200000";
@@ -7,61 +7,46 @@ const EDIT_PASSWORD = "guan";
 const MAX_BODY = 300000;
 const MAX_PAYMENTS = 2000;
 
-export async function handler(event) {
+export const config = { path: ["/api/state", "/api/session"] };
+
+export default async function handler(req) {
   try {
-    const path = routeOf(event);
-    if (event.httpMethod === "GET" && path === "/api/session") return json({ editor: authed(event) });
-    if (event.httpMethod === "DELETE" && path === "/api/session") return logout(event);
-    if (event.httpMethod === "POST" && path === "/api/session") return login(event);
-    const store = storeFor(event);
-    if (event.httpMethod === "GET" && path === "/api/state") return json(await readState(store));
-    if (event.httpMethod === "PUT" && path === "/api/state") return putState(event, store);
+    const path = new URL(req.url).pathname.replace(/\/+$/, "");
+    if (path === "/api/session") {
+      if (req.method === "GET") return json({ editor: authed(req) });
+      if (req.method === "DELETE") return json({ editor: false }, 200, clearCookie(req));
+      if (req.method === "POST") return login(req);
+    }
+    if (path === "/api/state") {
+      const store = getStore({ name: STORE, consistency: "strong" });
+      if (req.method === "GET") return json(await readState(store));
+      if (req.method === "PUT") return putState(req, store);
+    }
     return json({ error: "Не найдено." }, 404);
   } catch (error) {
     console.error(error);
-    return json({ error: "Журнал временно недоступен." }, 500);
+    return json({ error: "Журнал временно недоступен.", code: String(error?.name || "Error") }, 500);
   }
 }
 
-function routeOf(event) {
-  const path = String(event.path || "/").replace(/\/+$/, "") || "/";
-  if (path.startsWith("/api")) return path;
-  const marker = "/.netlify/functions/kredit";
-  if (path === marker) return "/api";
-  if (path.startsWith(marker + "/")) return "/api" + path.slice(marker.length);
-  return path;
-}
-
-function storeFor(event) {
-  connectLambda(event);
-  return getStore({ name: STORE, consistency: "strong" });
-}
-
-function json(data, status, cookie) {
-  const headers = {
+function json(data, status = 200, cookie) {
+  const headers = new Headers({
     "content-type": "application/json; charset=utf-8",
     "cache-control": "no-store",
-  };
-  const response = { statusCode: status || 200, headers, body: JSON.stringify(data) };
-  if (cookie) response.multiValueHeaders = { "set-cookie": [cookie] };
-  return response;
+  });
+  if (cookie) headers.append("set-cookie", cookie);
+  return new Response(JSON.stringify(data), { status, headers });
 }
 
-function password() {
-  return EDIT_PASSWORD;
+function sessionToken() {
+  return createHmac("sha256", EDIT_PASSWORD).update("kredit-edit-v1").digest("base64url");
 }
 
-function sessionToken(secret) {
-  return createHmac("sha256", secret).update("kredit-edit-v1").digest("base64url");
-}
-
-function readCookie(event, name) {
-  const raw = event.headers?.cookie || event.headers?.Cookie || "";
-  for (const part of raw.split(";")) {
+function readCookie(req, name) {
+  for (const part of (req.headers.get("cookie") || "").split(";")) {
     const text = part.trim();
     const eq = text.indexOf("=");
-    if (eq === -1) continue;
-    if (text.slice(0, eq) === name) return text.slice(eq + 1);
+    if (eq !== -1 && text.slice(0, eq) === name) return text.slice(eq + 1);
   }
   return "";
 }
@@ -77,57 +62,49 @@ function sameText(a, b) {
   return left.length === right.length && timingSafeEqual(x, y);
 }
 
-function authed(event) {
-  const secret = password();
-  if (!secret) return false;
-  const got = readCookie(event, COOKIE);
-  if (!got) return false;
-  return sameText(got, sessionToken(secret));
+function authed(req) {
+  const got = readCookie(req, COOKIE);
+  return Boolean(got) && sameText(got, sessionToken());
 }
 
-function https(event) {
-  const proto = event.headers?.["x-forwarded-proto"] || "";
-  return proto.split(",")[0].trim() === "https" || String(event.rawUrl || "").startsWith("https:");
+function secureFlag(req) {
+  return new URL(req.url).protocol === "https:" ? "; Secure" : "";
 }
 
-function sessionCookie(event, token) {
-  const secure = https(event) ? "; Secure" : "";
-  return `${COOKIE}=${token}; HttpOnly; Path=/; SameSite=Lax${secure}`;
+function sessionCookie(req) {
+  return `${COOKIE}=${sessionToken()}; HttpOnly; Path=/; SameSite=Lax${secureFlag(req)}`;
 }
 
-function clearCookie(event) {
-  const secure = https(event) ? "; Secure" : "";
-  return `${COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${secure}`;
+function clearCookie(req) {
+  return `${COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${secureFlag(req)}`;
 }
 
-function clientIp(event) {
-  return event.headers?.["x-nf-client-connection-ip"]
-    || String(event.headers?.["x-forwarded-for"] || "").split(",")[0].trim()
+function clientIp(req) {
+  return req.headers.get("x-nf-client-connection-ip")
+    || (req.headers.get("x-forwarded-for") || "").split(",")[0].trim()
     || "local";
 }
 
-async function login(event) {
-  const secret = password();
-  if (!secret) return json({ error: "Пароль правок не задан в настройках сайта." }, 503);
+async function login(req) {
   let body = {};
-  try { body = JSON.parse(event.body || "{}"); } catch (e) { body = {}; }
-  if (sameText(body.password || "", secret)) {
-    return json({ editor: true }, 200, sessionCookie(event, sessionToken(secret)));
+  try { body = JSON.parse((await req.text()) || "{}"); } catch (e) { body = {}; }
+  if (sameText(body.password || "", EDIT_PASSWORD)) {
+    return json({ editor: true }, 200, sessionCookie(req));
   }
-  const store = storeFor(event);
-  const ip = clientIp(event);
-  const lockKey = "lock:" + createHmac("sha256", "kredit-lock").update(ip).digest("hex").slice(0, 24);
-  const row = (await store.get(lockKey, { type: "json" })) || { fails: 0, until: 0 };
-  if (row.until > Date.now()) return json({ error: "Слишком много попыток. Подождите 15 минут." }, 429);
-  const fails = (row.until && row.until < Date.now() ? 0 : row.fails) + 1;
-  const until = fails >= 8 ? Date.now() + 15 * 60 * 1000 : 0;
-  await store.setJSON(lockKey, { fails: until ? 0 : fails, until });
+  // Ограничение подбора пароля. Если хранилище недоступно, всё равно отказываем.
+  try {
+    const store = getStore({ name: STORE, consistency: "strong" });
+    const lockKey = "lock:" + createHmac("sha256", "kredit-lock").update(clientIp(req)).digest("hex").slice(0, 24);
+    const row = (await store.get(lockKey, { type: "json" })) || { fails: 0, until: 0 };
+    if (row.until > Date.now()) return json({ error: "Слишком много попыток. Подождите 15 минут." }, 429);
+    const fails = (row.until && row.until < Date.now() ? 0 : row.fails) + 1;
+    const until = fails >= 8 ? Date.now() + 15 * 60 * 1000 : 0;
+    await store.setJSON(lockKey, { fails: until ? 0 : fails, until });
+  } catch (error) {
+    console.error(error);
+  }
   await new Promise((resolve) => setTimeout(resolve, 300));
   return json({ error: "Неверный пароль." }, 401);
-}
-
-function logout(event) {
-  return json({ editor: false }, 200, clearCookie(event));
 }
 
 async function readState(store) {
@@ -200,15 +177,12 @@ function cleanPayment(raw) {
   if (!validDate(raw.date)) return null;
   const amountKop = Number(raw.amountKop);
   if (!Number.isInteger(amountKop) || amountKop <= 0 || amountKop > 1e12) return null;
-  const smsKop = Number(raw.smsKop || 0);
-  if (!Number.isInteger(smsKop) || smsKop < 0 || smsKop > amountKop) return null;
-  return { id, date: raw.date, amountKop, smsKop, note: String(raw.note || "").slice(0, 200) };
+  return { id, date: raw.date, amountKop, smsKop: 0, note: String(raw.note || "").slice(0, 200) };
 }
 
-async function putState(event, store) {
-  if (!password()) return json({ error: "Пароль правок не задан в настройках сайта." }, 503);
-  if (!authed(event)) return json({ error: "Нужен пароль." }, 401);
-  const text = event.body || "";
+async function putState(req, store) {
+  if (!authed(req)) return json({ error: "Нужен пароль." }, 401);
+  const text = await req.text();
   if (text.length > MAX_BODY) return json({ error: "Слишком большой журнал." }, 413);
   let body;
   try { body = JSON.parse(text); } catch (e) { return json({ error: "Журнал не разобран." }, 400); }
@@ -227,8 +201,9 @@ async function putState(event, store) {
     ? body.deletedIds.map((id) => String(id).slice(0, 80)).slice(0, MAX_PAYMENTS)
     : [];
   const current = await readState(store);
-  const sent = body.updatedAt || null;
-  if (sent !== current.updatedAt) return json({ error: "Журнал уже изменён. Обновите страницу." }, 409);
+  if ((body.updatedAt || null) !== current.updatedAt) {
+    return json({ error: "Журнал уже изменён. Обновите страницу." }, 409);
+  }
   const updatedAt = new Date().toISOString();
   await store.setJSON("state", { settings, payments, deletedIds, updatedAt });
   return json({ updatedAt });

@@ -1355,7 +1355,7 @@ async function api(path, options) {
   }));
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    const error = new Error(data.error || "Не удалось связаться с журналом.");
+    const error = new Error((data.error || "Не удалось связаться с журналом.") + (data.code ? ` [${data.code}]` : ""));
     error.status = res.status;
     throw error;
   }

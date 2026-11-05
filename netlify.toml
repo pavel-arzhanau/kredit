@@ -10,18 +10,6 @@
 [functions]
   node_bundler = "esbuild"
 
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/kredit/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/api"
-  to = "/.netlify/functions/kredit"
-  status = 200
-  force = true
-
 [[headers]]
   for = "/*"
   [headers.values]
