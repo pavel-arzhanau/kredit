@@ -136,11 +136,10 @@
 
     <section class="journal">
       <h2>Журнал фактических платежей</h2>
-      <p class="muted small">Сумма — это списание со счёта. Если банк включил в него комиссию за СМС, оставьте галочку: эти копейки не уменьшают долг. Добавление, удаление и правка один раз за сессию браузера спрашивают пароль.</p>
+      <p class="muted small">Сумма — это списание со счёта. Комиссия за СМС автоматически отделяется только от первого платежа в каждом календарном месяце: она не уменьшает долг. Добавление, удаление и правка один раз за сессию браузера спрашивают пароль.</p>
       <form class="row" id="pay-form">
         <label>Дата<input id="pay-date" class="date" type="date" required /></label>
         <label>Сумма, BYN<input id="pay-amount" class="money" inputmode="decimal" required autocomplete="off" /></label>
-        <label class="check" id="pay-sms-label"><input id="pay-sms" type="checkbox" checked /><span id="pay-sms-text">из суммы комиссия за СМС</span></label>
         <label>Заметка<input id="pay-note" type="text" maxlength="200" autocomplete="off" /></label>
         <button class="primary" type="submit" id="pay-submit">Добавить</button>
         <button type="button" id="pay-cancel" hidden>Отмена</button>
@@ -162,7 +161,13 @@
       <div class="grid">
         <label>Сумма кредита, BYN<input id="set-amount" inputmode="decimal" /></label>
         <label>Дата выдачи<input id="set-start" type="date" /></label>
-        <label>День платежа<input id="set-day" type="number" min="1" max="31" /></label>
+        <label>Дата платежа
+          <select id="set-due-rule">
+            <option value="lastBusinessDay">последний рабочий день месяца</option>
+            <option value="fixedDay">фиксированный день месяца</option>
+          </select>
+        </label>
+        <label id="set-day-label">День платежа<input id="set-day" type="number" min="1" max="31" /></label>
         <label>Ставка первые дни, %<input id="set-rate1" inputmode="decimal" /></label>
         <label>Льготных дней<input id="set-days" type="number" min="0" max="3650" /></label>
         <label>Ставка далее, %<input id="set-rate2" inputmode="decimal" /></label>
@@ -198,10 +203,13 @@ const DEFAULT_SETTINGS = {
   amount: 200000,
   start: "2026-11-04",
   paymentDay: 4,
+  dueRule: "lastBusinessDay",
+  firstInterestStart: "2026-12-06",
   rate1: 10.9,
   rate2: 15,
   preferentialDays: 730,
   graceMonths: 6,
+  principalMonths: 353,
   termYears: 30,
   yearBase: 365,
   monthly: 3500,
@@ -309,6 +317,10 @@ function formatPercent(hundredths) {
 }
 
 function paymentDate(c, n) {
+  if (c.dueRule === "lastBusinessDay") {
+    const month = addMonths({ y: c.start.y, m: c.start.m, d: 1 }, n);
+    return lastBusinessDay(month.y, month.m);
+  }
   const dim0 = daysInMonth(c.start.y, c.start.m);
   const day0 = Math.min(c.paymentDay, dim0);
   let y = c.start.y;
@@ -322,6 +334,11 @@ function paymentDate(c, n) {
   const yy = Math.floor(total / 12);
   const mm = total - yy * 12 + 1;
   return { y: yy, m: mm, d: Math.min(c.paymentDay, daysInMonth(yy, mm)) };
+}
+function lastBusinessDay(y, m) {
+  let d = daysInMonth(y, m);
+  while (new Date(Date.UTC(y, m - 1, d)).getUTCDay() % 6 === 0) d--;
+  return { y, m, d };
 }
 function nextDue(c, after) {
   for (let n = 1; n <= c.termMonths + 60; n++) {
@@ -362,7 +379,7 @@ function rateLabel(c, rates) {
   return formatPercent(c.rate1);
 }
 function initState(c) {
-  return { balance: c.amountKop, date: c.start, cumInterest: 0, cumPaid: 0, cumSms: 0, unpaid: 0 };
+  return { balance: c.amountKop, date: c.firstInterestStart, cumInterest: 0, cumPaid: 0, cumSms: 0, unpaid: 0 };
 }
 function applyPayment(c, state, item) {
   const from = state.date;
@@ -426,11 +443,14 @@ function contractFrom(s) {
   const termMonths = s.termYears * 12;
   const graceMonths = Math.min(s.graceMonths, Math.max(0, termMonths - 1));
   const amountKop = Math.round(s.amount * 100);
-  const principalMonths = Math.max(1, termMonths - graceMonths);
+  const principalMonths = Math.max(1, Number(s.principalMonths) || (termMonths - graceMonths));
+  const firstInterestStart = parseISO(s.firstInterestStart) || start;
   return {
     amountKop,
     start,
     paymentDay: s.paymentDay,
+    dueRule: s.dueRule,
+    firstInterestStart,
     rate1: Math.round(s.rate1 * 100),
     rate2: Math.round(s.rate2 * 100),
     rateChange: addDays(start, s.preferentialDays),
@@ -491,6 +511,20 @@ function simulateItems(c, items) {
   }
   return { state, rows, events };
 }
+function withMonthlySms(c, payments) {
+  const billed = new Set();
+  return payments
+    .slice()
+    .sort((a, b) => cmp(a.date, b.date) || String(a.id).localeCompare(String(b.id)))
+    .map((payment) => {
+      const key = payment.date.y + "-" + pad(payment.date.m);
+      const smsKop = c.smsKop && !billed.has(key)
+        ? Math.min(c.smsKop, payment.amountKop)
+        : 0;
+      if (smsKop) billed.add(key);
+      return { ...payment, smsKop, smsFromGross: true };
+    });
+}
 function projectForward(c, fromState) {
   const state = {
     balance: fromState.balance,
@@ -541,6 +575,7 @@ function sanitizeSettings(raw) {
   const rate2 = parseNum(raw.rate2);
   const start = parseISO(raw.start);
   const paymentDay = Number(raw.paymentDay);
+  const dueRule = raw.dueRule === "fixedDay" ? "fixedDay" : "lastBusinessDay";
   const preferentialDays = Number(raw.preferentialDays);
   const graceMonths = Number(raw.graceMonths);
   const termYears = Number(raw.termYears);
@@ -558,10 +593,13 @@ function sanitizeSettings(raw) {
       amount,
       start: iso(start),
       paymentDay,
+      dueRule,
+      firstInterestStart: d.firstInterestStart,
       rate1,
       rate2,
       preferentialDays,
       graceMonths,
+      principalMonths: d.principalMonths,
       termYears,
       yearBase: Number(raw.yearBase) === 360 ? 360 : 365,
       monthly,
@@ -847,15 +885,13 @@ function render() {
   const today = todayDate();
   const plan = buildPlan(c);
   const minimum = buildMinimum(c);
-  const journalItems = app.payments.map((p) => ({
+  const journalItems = withMonthlySms(c, app.payments.map((p) => ({
     id: p.id,
     date: parseISO(p.date),
     amountKop: p.amountKop,
-    smsKop: p.smsKop || 0,
-    smsFromGross: true,
     note: p.note,
     kind: "fact",
-  }));
+  })));
   const pastItems = journalItems.filter((p) => cmp(p.date, today) <= 0);
   const past = simulateItems(c, pastItems);
   const accrued = cmp(today, past.state.date) > 0 ? accrue(c, past.state.balance, past.state.date, today) : 0;
@@ -875,9 +911,9 @@ function render() {
     `Белагропромбанк · выдан ${esc(longDate(c.start))} · ${esc(money(c.amountKop))} BYN · ${c.termMonths / 12} ${plural(c.termMonths / 12, "год", "года", "лет")} · ` +
     `<a href="https://www.belapb.by/chastnomu-klientu/kredity/kredity-na-priobretenie-zhilya/">дифференцированный кредит на жильё</a>`;
   document.getElementById("plan-note").textContent =
-    `Каждое ${c.paymentDay}-е число. Первые ${c.graceMonths} ${plural(c.graceMonths, "месяц", "месяца", "месяцев")} банк не требует основной долг, но всё сверх процентов его уменьшает.` +
+    `План использует банковский календарь только как ориентир. Фактический платёж можно внести в любую дату: проценты и остаток пересчитываются по дате и сумме из журнала.` +
     (c.smsKop
-      ? ` Со счёта уходит ${money(c.monthlyKop + c.smsKop)} BYN: ${money(c.monthlyKop)} в кредит и ${money(c.smsKop)} за СМС.`
+      ? ` При первом списании месяца ${money(c.smsKop)} BYN отделяется как комиссия за СМС.`
       : "");
 
   const useReal = journalItems.length > 0 && realEnd;
@@ -1167,30 +1203,23 @@ function render() {
     ].filter(Boolean),
   });
 
-  renderJournal();
+  renderJournal(journalItems);
   renderTable(c, plan, journalItems, today);
-  const smsText = document.getElementById("pay-sms-text");
-  const smsLabel = document.getElementById("pay-sms-label");
-  if (c.smsKop) {
-    smsLabel.hidden = false;
-    smsText.textContent = `из суммы ${money(c.smsKop)} BYN — комиссия за СМС, она не гасит долг`;
-  } else {
-    smsLabel.hidden = true;
-  }
   document.getElementById("table-note").textContent = plan.rows.length
     ? `Обязательная доля основного долга после отсрочки — ${money(c.installmentKop)} BYN в месяц, без пересчёта после досрочки. «Досрочно» — насколько план гасит долг быстрее этой доли.` +
       (c.smsKop ? ` Колонка «Платёж» — списание со счёта, вместе с СМС ${money(c.smsKop)} BYN.` : "")
     : "";
   document.getElementById("assumptions").innerHTML =
-    `<p>Проценты: остаток × ставка × фактические дни / ${c.yearBase}. День выдачи входит в первый период, день платежа относится к следующему. ` +
+    `<p>Даты платежей — ${c.dueRule === "lastBusinessDay" ? "последний рабочий день каждого месяца, как в выданном банком графике" : "фиксированное число каждого месяца"}. ` +
+    `Первый процентный период начинается ${esc(longDate(c.firstInterestStart))}: так первый платёж совпадает с суммой ${esc(money(149315))} BYN из банковской таблицы. ` +
+    `Дальше проценты: остаток × ставка × фактические дни / ${c.yearBase}. ` +
     `Ставка ${esc(formatPercent(c.rate1))} действует ${c.preferentialDays} дней, с ${esc(longDate(c.rateChange))} — ${esc(formatPercent(c.rate2))}. ` +
     `Високосный год на базу ${c.yearBase} не влияет. Копейки округляются по каждому отрезку ставки.</p>` +
     (c.smsKop
-      ? `<p>Каждый месячный платёж банк увеличивает на ${esc(money(c.smsKop))} BYN за СМС. Комиссия не гасит ни проценты, ни долг, поэтому срок от неё не меняется, а переплата растёт. ` +
-        `Плановые ${esc(money(c.monthlyKop))} BYN идут в кредит целиком. В журнале пишется сумма списания: галочка отделяет комиссию.</p>`
+      ? `<p>Раз в календарный месяц банк добавляет ${esc(money(c.smsKop))} BYN за СМС. Комиссия не гасит ни проценты, ни долг, поэтому срок от неё не меняется, а переплата растёт. ` +
+        `Плановые ${esc(money(c.monthlyKop))} BYN идут в кредит целиком. В журнале пишется сумма списания: комиссия автоматически отделяется только от первого платежа месяца.</p>`
       : "") +
-    `<p>Если декабрьская выписка не сойдётся с первым платежом в таблице, переключите базу на 360 в условиях. ` +
-    `Банк может иначе учесть день выдачи. Это ориентир для сравнения плана и факта, не платёжный график банка.</p>` +
+    `<p>В фото видны только первые 48 строк. Поэтому после них календарь и проценты являются расчётом, а не дословной копией банковского графика; пришлите остальные страницы, и я заменю оценку точными строками.</p>` +
     (minimum.state.balance === 0
       ? `<p>Обязательный график без досрочки: ${minimum.rows.length} ${plural(minimum.rows.length, "платёж", "платежа", "платежей")} до ${esc(longDate(minEnd))}, проценты ${esc(money(minimum.state.cumInterest))} BYN${minimum.state.cumSms ? `, СМС ${esc(money(minimum.state.cumSms))} BYN` : ""}.</p>`
       : "");
@@ -1209,10 +1238,10 @@ function inPeriod(date, row, isFirst) {
   if (isFirst) return cmp(date, row.from) >= 0 && cmp(date, row.date) <= 0;
   return cmp(date, row.from) > 0 && cmp(date, row.date) <= 0;
 }
-function renderJournal() {
+function renderJournal(items) {
   const list = document.getElementById("journal");
   list.replaceChildren();
-  if (!app.payments.length) {
+  if (!items.length) {
     const li = document.createElement("li");
     li.className = "empty muted";
     li.style.display = "block";
@@ -1221,11 +1250,11 @@ function renderJournal() {
     return;
   }
   const today = todayDate();
-  for (const p of app.payments) {
+  for (const p of items) {
     const li = document.createElement("li");
     li.dataset.id = p.id;
     const date = document.createElement("div");
-    const d = parseISO(p.date);
+    const d = p.date;
     date.textContent = d.d + "." + pad(d.m) + "." + d.y;
     if (cmp(d, today) > 0) {
       const b = document.createElement("div");
@@ -1395,7 +1424,9 @@ function fillForms() {
   document.getElementById("monthly").value = String(app.settings.monthly).replace(".", ",");
   document.getElementById("set-amount").value = String(app.settings.amount);
   document.getElementById("set-start").value = app.settings.start;
+  document.getElementById("set-due-rule").value = app.settings.dueRule === "fixedDay" ? "fixedDay" : "lastBusinessDay";
   document.getElementById("set-day").value = String(app.settings.paymentDay);
+  document.getElementById("set-day-label").hidden = app.settings.dueRule !== "fixedDay";
   document.getElementById("set-rate1").value = String(app.settings.rate1).replace(".", ",");
   document.getElementById("set-rate2").value = String(app.settings.rate2).replace(".", ",");
   document.getElementById("set-days").value = String(app.settings.preferentialDays);
@@ -1421,6 +1452,7 @@ function readSettingsFromForm() {
     amount: document.getElementById("set-amount").value,
     start: document.getElementById("set-start").value,
     paymentDay: document.getElementById("set-day").value,
+    dueRule: document.getElementById("set-due-rule").value,
     rate1: document.getElementById("set-rate1").value,
     rate2: document.getElementById("set-rate2").value,
     preferentialDays: document.getElementById("set-days").value,
@@ -1455,7 +1487,7 @@ function scheduleCommit() {
 function boot() {
   fillForms();
   render();
-  for (const id of ["monthly", "set-amount", "set-start", "set-day", "set-rate1", "set-rate2", "set-days", "set-grace", "set-years", "set-base", "set-sms"]) {
+  for (const id of ["monthly", "set-amount", "set-start", "set-due-rule", "set-day", "set-rate1", "set-rate2", "set-days", "set-grace", "set-years", "set-base", "set-sms"]) {
     document.getElementById(id).addEventListener("input", scheduleCommit);
     document.getElementById(id).addEventListener("change", commitSettings);
   }
@@ -1466,12 +1498,7 @@ function boot() {
     const amountKop = parseMoney(document.getElementById("pay-amount").value);
     const note = document.getElementById("pay-note").value.trim();
     const start = parseISO(app.settings.start);
-    const smsKop = document.getElementById("pay-sms").checked ? Math.round((Number(app.settings.sms) || 0) * 100) : 0;
     if (!date || amountKop == null || amountKop <= 0) return;
-    if (smsKop >= amountKop) {
-      alert("Сумма должна быть больше комиссии за СМС, иначе в кредит не попадёт ничего.");
-      return;
-    }
     if (start && cmp(date, start) < 0) {
       alert("Дата платежа раньше выдачи кредита.");
       return;
@@ -1481,16 +1508,14 @@ function boot() {
       if (item) {
         item.date = iso(date);
         item.amountKop = amountKop;
-        item.smsKop = smsKop;
         item.note = note;
       }
     } else {
-      app.payments.push({ id: crypto.randomUUID(), date: iso(date), amountKop, smsKop, note });
+      app.payments.push({ id: crypto.randomUUID(), date: iso(date), amountKop, note });
     }
     app.payments.sort(comparePay);
     editingId = null;
     document.getElementById("pay-note").value = "";
-    document.getElementById("pay-sms").checked = true;
     document.getElementById("pay-submit").textContent = "Добавить";
     document.getElementById("pay-cancel").hidden = true;
     save();
@@ -1526,7 +1551,6 @@ function boot() {
       editingId = id;
       document.getElementById("pay-date").value = item.date;
       document.getElementById("pay-amount").value = formatInputMoney(item.amountKop);
-      document.getElementById("pay-sms").checked = item.smsKop > 0;
       document.getElementById("pay-note").value = item.note;
       document.getElementById("pay-submit").textContent = "Сохранить";
       document.getElementById("pay-cancel").hidden = false;
@@ -1537,7 +1561,7 @@ function boot() {
     const blob = new Blob([JSON.stringify({
       monthly: app.settings.monthly,
       yearBase: app.settings.yearBase,
-      payments: app.payments.map((p) => ({ id: p.id, date: p.date, amount: p.amountKop / 100, sms: (p.smsKop || 0) / 100, note: p.note })),
+      payments: app.payments.map((p) => ({ id: p.id, date: p.date, amount: p.amountKop / 100, note: p.note })),
     }, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
