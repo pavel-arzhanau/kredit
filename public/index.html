@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Кредит 200 000 BYN — план и факт</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; font: 15px/1.45 "Segoe UI", system-ui, sans-serif; color: #18181b; background: #f4f4f5; }
+    main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 64px; }
+    h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; }
+    h2 { font-size: 18px; margin: 0 0 6px; }
+    a { color: #1d4ed8; }
+    p { margin: 0 0 10px; }
+    .muted { color: #52525b; }
+    .small { font-size: 13px; }
+    .sub { margin: 0; }
+    .planbar, .card, .chart-card, .journal, details.settings { background: #fff; border: 1px solid #e4e4e7; border-radius: 10px; }
+    .planbar { margin-top: 18px; padding: 14px 16px; display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+    .planbar label { font-weight: 650; }
+    .planbar .note { flex: 1 1 280px; margin: 0; }
+    input, select, button { font: inherit; color: inherit; }
+    input, select { background: #fff; border: 1px solid #d4d4d8; border-radius: 8px; padding: 7px 10px; }
+    input:focus, select:focus, button:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 1px; }
+    input.money { width: 120px; text-align: right; font-variant-numeric: tabular-nums; }
+    input.date { width: 160px; }
+    button { background: #fff; border: 1px solid #d4d4d8; border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+    button.primary { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+    button.ghost { background: transparent; }
+    button.danger { color: #b91c1c; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+    .card { padding: 16px 16px 14px; border-top: 3px solid #18181b; }
+    .card.cost { border-top-color: #b45309; }
+    .card.time { border-top-color: #15803d; }
+    .card .k { font-size: 13px; color: #52525b; }
+    .card .v { font-size: 28px; line-height: 1.15; font-weight: 650; font-variant-numeric: tabular-nums; margin: 4px 0; }
+    .card .s { font-size: 14px; }
+    .card ul { list-style: none; padding: 0; margin: 10px 0 0; }
+    .card li { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; margin: 4px 0; font-variant-numeric: tabular-nums; }
+    .card li span { color: #52525b; }
+    .card li b { font-weight: 650; text-align: right; }
+    .good, .card li b.good, tr.past td.good { color: #15803d; }
+    .bad, .card li b.bad, tr.past td.bad { color: #b91c1c; }
+    .warn { color: #b45309; }
+    .banner { margin-top: 14px; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 12px 14px; }
+    .banner strong { display: block; margin-bottom: 2px; }
+    .charts { display: grid; gap: 14px; margin-top: 14px; }
+    .chart-card { padding: 16px 16px 12px; }
+    .chart { position: relative; }
+    .chart svg { width: 100%; height: auto; display: block; font-family: "Segoe UI", system-ui, sans-serif; }
+    .tip { position: absolute; z-index: 2; min-width: 180px; max-width: 260px; background: #18181b; color: #fff; border-radius: 8px; padding: 8px 10px; font-size: 12px; pointer-events: none; }
+    .tip .d { color: #d4d4d8; margin-bottom: 4px; }
+    .tip div { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 8px; font-size: 13px; color: #3f3f46; }
+    .swatch { width: 22px; height: 0; border-top: 3px solid; display: inline-block; vertical-align: middle; margin-right: 6px; }
+    .swatch.dash { border-top-style: dashed; }
+    .journal { margin-top: 14px; padding: 16px; }
+    form.row, .tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+    form.row label, .field { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #52525b; }
+    .journal-list { list-style: none; padding: 0; margin: 14px 0 0; }
+    .journal-list li { display: grid; grid-template-columns: 120px 140px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid #f4f4f5; }
+    .journal-list .amt { text-align: right; font-variant-numeric: tabular-nums; }
+    .empty { margin: 12px 0 0; }
+    .table-wrap { margin-top: 14px; max-height: 560px; overflow: auto; border: 1px solid #e4e4e7; border-radius: 10px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 7px 10px; border-bottom: 1px solid #f4f4f5; vertical-align: top; }
+    th { text-align: left; font-size: 12px; font-weight: 650; color: #52525b; background: #fafafa; position: sticky; top: 0; z-index: 1; }
+    td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    tr.grace td { background: #fafafa; }
+    tr.next td { background: #eff6ff; }
+    tr.past td { color: #3f3f46; }
+    td .subn { display: block; color: #71717a; font-size: 11px; font-weight: 400; }
+    details.settings { margin-top: 14px; padding: 12px 16px 16px; }
+    details.settings summary { cursor: pointer; font-weight: 650; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 14px; margin-top: 14px; }
+    .grid label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: #52525b; }
+    .grid input, .grid select { width: 100%; }
+    .settings-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .foot { margin-top: 16px; }
+    .err { color: #b91c1c; font-weight: 650; min-height: 1.2em; }
+    label.check { flex-direction: row; align-items: center; gap: 8px; max-width: 320px; color: #3f3f46; }
+    label.check input { width: auto; margin: 0; }
+    button:disabled, input:disabled, select:disabled { opacity: 0.6; cursor: not-allowed; }
+    #auth-error { margin: 8px 2px 0; }
+    @media (max-width: 860px) {
+      .stats, .grid, .journal-list li { grid-template-columns: 1fr; }
+      .card .v { font-size: 24px; }
+      .journal-list .amt { text-align: left; }
+    }
+    @media print {
+      body { background: #fff; }
+      main { padding: 0; max-width: none; }
+      .noprint { display: none !important; }
+      .table-wrap { max-height: none; overflow: visible; }
+      .card, .chart-card, .journal, details.settings { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Кредит на жильё: план и факт</h1>
+    <p class="sub muted" id="subtitle"></p>
+
+    <div class="planbar" id="authbar">
+      <p class="note muted small" id="auth-status">Загрузка журнала…</p>
+      <form class="row" id="login-form" hidden>
+        <label>Пароль правок<input id="login-password" type="password" autocomplete="current-password" required /></label>
+        <button class="primary" type="submit">Войти</button>
+      </form>
+      <button type="button" id="logout" hidden>Закончить правки</button>
+    </div>
+    <p class="err small" id="auth-error"></p>
+
+    <div class="planbar">
+      <label for="monthly">Плановый платёж в кредит</label>
+      <input id="monthly" class="money" inputmode="decimal" value="3500" autocomplete="off" />
+      <span>BYN</span>
+      <p class="note muted small" id="plan-note"></p>
+    </div>
+
+    <section class="stats" id="stats" aria-live="polite"></section>
+    <div id="banner"></div>
+    <p class="card" id="next" style="margin-top:14px"></p>
+
+    <section class="charts">
+      <article class="chart-card">
+        <h2>Остаток основного долга</h2>
+        <p class="muted small" id="cap-balance"></p>
+        <div id="chart-balance" class="chart"></div>
+      </article>
+      <article class="chart-card">
+        <h2>Отклонение долга от плана</h2>
+        <p class="muted small" id="cap-delta"></p>
+        <div id="chart-delta" class="chart"></div>
+      </article>
+      <article class="chart-card">
+        <h2>Накопленные проценты</h2>
+        <p class="muted small" id="cap-interest"></p>
+        <div id="chart-interest" class="chart"></div>
+      </article>
+    </section>
+
+    <section class="journal">
+      <h2>Журнал фактических платежей</h2>
+      <p class="muted small">Сумма — это списание со счёта. Если банк включил в него комиссию за СМС, оставьте галочку: эти копейки не уменьшают долг. На сайте журнал общий. С диска он остаётся только в этом браузере.</p>
+      <form class="row" id="pay-form">
+        <label>Дата<input id="pay-date" class="date" type="date" required /></label>
+        <label>Сумма, BYN<input id="pay-amount" class="money" inputmode="decimal" required autocomplete="off" /></label>
+        <label class="check" id="pay-sms-label"><input id="pay-sms" type="checkbox" checked /><span id="pay-sms-text">из суммы комиссия за СМС</span></label>
+        <label>Заметка<input id="pay-note" type="text" maxlength="200" autocomplete="off" /></label>
+        <button class="primary" type="submit" id="pay-submit">Добавить</button>
+        <button type="button" id="pay-cancel" hidden>Отмена</button>
+      </form>
+      <div class="tools noprint" style="margin-top:10px">
+        <button type="button" id="export">Выгрузить журнал</button>
+        <button type="button" id="import">Загрузить журнал</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+      </div>
+      <ul class="journal-list" id="journal"></ul>
+    </section>
+
+    <h2 style="margin-top:22px">График по месяцам</h2>
+    <p class="muted small" id="table-note"></p>
+    <div class="table-wrap" id="table-wrap"></div>
+
+    <details class="settings">
+      <summary>Условия договора и расчёта</summary>
+      <div class="grid">
+        <label>Сумма кредита, BYN<input id="set-amount" inputmode="decimal" /></label>
+        <label>Дата выдачи<input id="set-start" type="date" /></label>
+        <label>День платежа<input id="set-day" type="number" min="1" max="31" /></label>
+        <label>Ставка первые дни, %<input id="set-rate1" inputmode="decimal" /></label>
+        <label>Льготных дней<input id="set-days" type="number" min="0" max="3650" /></label>
+        <label>Ставка далее, %<input id="set-rate2" inputmode="decimal" /></label>
+        <label>Отсрочка основного долга, мес.<input id="set-grace" type="number" min="0" max="120" /></label>
+        <label>Срок договора, лет<input id="set-years" type="number" min="1" max="40" /></label>
+        <label>База начисления
+          <select id="set-base">
+            <option value="365">фактические дни / 365</option>
+            <option value="360">фактические дни / 360</option>
+          </select>
+        </label>
+        <label>СМС в месяц, BYN<input id="set-sms" inputmode="decimal" /></label>
+      </div>
+      <div class="settings-actions noprint">
+        <button type="button" id="reset-settings">Вернуть условия договора</button>
+        <button type="button" class="danger" id="clear-journal">Очистить журнал</button>
+      </div>
+      <p class="small muted" id="settings-error" style="margin-top:10px"></p>
+    </details>
+
+    <div class="foot muted small" id="assumptions"></div>
+  </main>
+
+  <script>
+"use strict";
+
+/** Платежи, которые я дописываю в файл. При смене SEED_REV они заменяют одноимённые записи в браузере. */
+const SEED_REV = 1;
+const SEEDED_PAYMENTS = [];
+const STORAGE_KEY = "kredit-200000-2026-11-04";
+
+const DEFAULT_SETTINGS = {
+  amount: 200000,
+  start: "2026-11-04",
+  paymentDay: 4,
+  rate1: 10.9,
+  rate2: 15,
+  preferentialDays: 730,
+  graceMonths: 6,
+  termYears: 30,
+  yearBase: 365,
+  monthly: 3500,
+  sms: 0.4,
+};
+
+const MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+const MONTHS_SHORT = ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
+const moneyFmt = new Intl.NumberFormat("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+function pad(n) { return String(n).padStart(2, "0"); }
+function iso(d) { return d.y + "-" + pad(d.m) + "-" + pad(d.d); }
+function cmp(a, b) {
+  if (a.y !== b.y) return a.y - b.y;
+  if (a.m !== b.m) return a.m - b.m;
+  return a.d - b.d;
+}
+function daysInMonth(y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); }
+function addMonths(a, n) {
+  const total = a.y * 12 + (a.m - 1) + n;
+  const y = Math.floor(total / 12);
+  const m0 = total - y * 12;
+  return { y, m: m0 + 1, d: Math.min(a.d, daysInMonth(y, m0 + 1)) };
+}
+function addDays(a, n) {
+  const dt = new Date(Date.UTC(a.y, a.m - 1, a.d + n));
+  return { y: dt.getUTCFullYear(), m: dt.getUTCMonth() + 1, d: dt.getUTCDate() };
+}
+function daysBetween(a, b) {
+  return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
+}
+function parseISO(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || ""));
+  if (!m) return null;
+  const d = { y: +m[1], m: +m[2], d: +m[3] };
+  if (d.m < 1 || d.m > 12 || d.d < 1 || d.d > daysInMonth(d.y, d.m)) return null;
+  return d;
+}
+function todayDate() {
+  const n = new Date();
+  return { y: n.getFullYear(), m: n.getMonth() + 1, d: n.getDate() };
+}
+function later(a, b) { return cmp(a, b) >= 0 ? a : b; }
+function earlier(a, b) { return cmp(a, b) <= 0 ? a : b; }
+function plural(n, one, few, many) {
+  const x = Math.abs(Math.trunc(n)) % 100;
+  const y = x % 10;
+  if (x > 10 && x < 20) return many;
+  if (y === 1) return one;
+  if (y > 1 && y < 5) return few;
+  return many;
+}
+function spanText(from, to) {
+  if (cmp(to, from) < 0) return spanText(to, from);
+  let months = (to.y - from.y) * 12 + (to.m - from.m);
+  let anchor = addMonths(from, months);
+  if (cmp(anchor, to) > 0) {
+    months -= 1;
+    anchor = addMonths(from, months);
+  }
+  const days = daysBetween(anchor, to);
+  const parts = [];
+  const y = Math.floor(months / 12);
+  const m = months % 12;
+  if (y) parts.push(y + " " + plural(y, "год", "года", "лет"));
+  if (m) parts.push(m + " " + plural(m, "месяц", "месяца", "месяцев"));
+  if (days) parts.push(days + " " + plural(days, "день", "дня", "дней"));
+  return parts.join(" ") || "0 дней";
+}
+function longDate(d) { return d.d + " " + MONTHS[d.m - 1] + " " + d.y; }
+function shortDate(d) { return d.d + " " + MONTHS_SHORT[d.m - 1] + " " + String(d.y).slice(2); }
+function money(kop) {
+  const sign = kop < 0 ? "−" : "";
+  return sign + moneyFmt.format(Math.abs(kop) / 100);
+}
+function axisLabel(kop, scaleKop) {
+  const rub = kop / 100;
+  const sign = rub < 0 ? "−" : "";
+  const abs = Math.abs(rub);
+  const scale = Math.abs(scaleKop) / 100;
+  if (scale >= 500) return sign + Math.round(abs).toLocaleString("ru-RU");
+  if (abs >= 100) return sign + Math.round(abs).toLocaleString("ru-RU");
+  return sign + abs.toLocaleString("ru-RU", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+function parseNum(s) {
+  const t = String(s).replace(/\s/g, "").replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(t)) return null;
+  return Number(t);
+}
+function parseMoney(s) {
+  const t = String(s).replace(/\s/g, "").replace(",", ".");
+  if (!/^\d+(\.\d{1,2})?$/.test(t)) return null;
+  const [a, b = ""] = t.split(".");
+  return Number(a) * 100 + Number((b + "00").slice(0, 2));
+}
+function formatPercent(hundredths) {
+  const v = hundredths / 100;
+  const text = Number.isInteger(v)
+    ? String(v)
+    : v.toLocaleString("ru-RU", { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+  return text + "%";
+}
+
+function paymentDate(c, n) {
+  const dim0 = daysInMonth(c.start.y, c.start.m);
+  const day0 = Math.min(c.paymentDay, dim0);
+  let y = c.start.y;
+  let m = c.start.m;
+  if (day0 <= c.start.d) {
+    const next = addMonths({ y, m, d: 1 }, 1);
+    y = next.y;
+    m = next.m;
+  }
+  const total = y * 12 + (m - 1) + (n - 1);
+  const yy = Math.floor(total / 12);
+  const mm = total - yy * 12 + 1;
+  return { y: yy, m: mm, d: Math.min(c.paymentDay, daysInMonth(yy, mm)) };
+}
+function nextDue(c, after) {
+  for (let n = 1; n <= c.termMonths + 60; n++) {
+    const date = paymentDate(c, n);
+    if (cmp(date, after) > 0) return { date, n };
+  }
+  return null;
+}
+
+/** Проценты в копейках за [from, to). До rateChange — ставка 1, с rateChange — ставка 2. */
+function accrue(c, balance, from, to) {
+  if (balance <= 0 || cmp(to, from) <= 0) return 0;
+  let kop = 0;
+  let cursor = from;
+  while (cmp(cursor, to) < 0) {
+    let segEnd = to;
+    let hundredths = c.rate2;
+    if (cmp(cursor, c.rateChange) < 0) {
+      hundredths = c.rate1;
+      if (cmp(c.rateChange, to) < 0) segEnd = c.rateChange;
+    }
+    const days = daysBetween(cursor, segEnd);
+    if (days <= 0) break;
+    kop += Math.round(balance * hundredths * days / (10000 * c.yearBase));
+    cursor = segEnd;
+  }
+  return kop;
+}
+function periodRates(from, to, change) {
+  if (cmp(to, from) <= 0) return { d1: 0, d2: 0 };
+  if (cmp(to, change) <= 0) return { d1: daysBetween(from, to), d2: 0 };
+  if (cmp(from, change) >= 0) return { d1: 0, d2: daysBetween(from, to) };
+  return { d1: daysBetween(from, change), d2: daysBetween(change, to) };
+}
+function rateLabel(c, rates) {
+  if (rates.d1 && rates.d2) return formatPercent(c.rate1) + " / " + formatPercent(c.rate2);
+  if (rates.d2) return formatPercent(c.rate2);
+  return formatPercent(c.rate1);
+}
+function initState(c) {
+  return { balance: c.amountKop, date: c.start, cumInterest: 0, cumPaid: 0, cumSms: 0, unpaid: 0 };
+}
+function applyPayment(c, state, item) {
+  const from = state.date;
+  const interest = accrue(c, state.balance, from, item.date) + state.unpaid;
+  const due = state.balance + interest;
+  const smsAsked = Math.max(0, item.smsKop || 0);
+  const gross = Math.max(0, item.amountKop || 0);
+  const sms = item.smsFromGross ? Math.min(smsAsked, gross) : smsAsked;
+  const loanWant = item.smsFromGross ? gross - sms : gross;
+  const applied = Math.min(loanWant, due);
+  const toInterest = Math.min(applied, interest);
+  const toPrincipal = applied - toInterest;
+  state.unpaid = interest - toInterest;
+  state.balance -= toPrincipal;
+  state.cumInterest += toInterest;
+  state.cumPaid += applied;
+  state.cumSms = (state.cumSms || 0) + sms;
+  state.date = item.date;
+  const rates = periodRates(from, item.date, c.rateChange);
+  return {
+    from,
+    date: item.date,
+    days: daysBetween(from, item.date),
+    interest,
+    toInterest,
+    toPrincipal,
+    unpaid: state.unpaid,
+    applied,
+    want: loanWant,
+    unapplied: loanWant - applied,
+    sms,
+    charged: applied + sms,
+    balance: state.balance,
+    cumInterest: state.cumInterest,
+    cumSms: state.cumSms,
+    rates,
+    rateLabel: rateLabel(c, rates),
+    kind: item.kind || "fact",
+    id: item.id || null,
+    note: item.note || "",
+    stuck: toPrincipal <= 0 && state.balance > 0,
+  };
+}
+function previewPayment(c, state, date) {
+  return applyPayment(c, {
+    balance: state.balance,
+    date: state.date,
+    cumInterest: state.cumInterest,
+    cumPaid: state.cumPaid,
+    cumSms: state.cumSms || 0,
+    unpaid: state.unpaid,
+  }, { date, amountKop: c.monthlyKop, smsKop: c.smsKop, kind: "preview" });
+}
+function mandatoryPrincipal(c, n, balanceBefore) {
+  if (n <= c.graceMonths) return 0;
+  if (n >= c.termMonths) return balanceBefore;
+  return Math.min(c.installmentKop, balanceBefore);
+}
+function contractFrom(s) {
+  const start = parseISO(s.start);
+  const termMonths = s.termYears * 12;
+  const graceMonths = Math.min(s.graceMonths, Math.max(0, termMonths - 1));
+  const amountKop = Math.round(s.amount * 100);
+  const principalMonths = Math.max(1, termMonths - graceMonths);
+  return {
+    amountKop,
+    start,
+    paymentDay: s.paymentDay,
+    rate1: Math.round(s.rate1 * 100),
+    rate2: Math.round(s.rate2 * 100),
+    rateChange: addDays(start, s.preferentialDays),
+    preferentialDays: s.preferentialDays,
+    graceMonths,
+    termMonths,
+    yearBase: s.yearBase,
+    monthlyKop: Math.round(s.monthly * 100),
+    smsKop: Math.round((Number(s.sms) || 0) * 100),
+    installmentKop: Math.round(amountKop / principalMonths),
+  };
+}
+function buildPlan(c) {
+  const state = initState(c);
+  const rows = [];
+  const events = [{ date: c.start, balance: c.amountKop, cumInterest: 0 }];
+  let stuck = false;
+  for (let n = 1; state.balance > 0 && n <= c.termMonths + 60; n++) {
+    const date = paymentDate(c, n);
+    const balanceBefore = state.balance;
+    const row = applyPayment(c, state, { date, amountKop: c.monthlyKop, smsKop: c.smsKop, kind: "plan" });
+    row.n = n;
+    row.mandP = Math.min(mandatoryPrincipal(c, n, balanceBefore), balanceBefore);
+    row.early = row.toPrincipal - row.mandP;
+    row.grace = n <= c.graceMonths;
+    rows.push(row);
+    events.push({ date, balance: state.balance, cumInterest: state.cumInterest });
+    if (row.stuck) { stuck = true; break; }
+  }
+  return { rows, events, state, stuck };
+}
+function buildMinimum(c) {
+  const state = initState(c);
+  const rows = [];
+  for (let n = 1; state.balance > 0 && n <= c.termMonths; n++) {
+    const date = paymentDate(c, n);
+    const interest = accrue(c, state.balance, state.date, date) + state.unpaid;
+    const mandP = mandatoryPrincipal(c, n, state.balance);
+    rows.push(applyPayment(c, state, { date, amountKop: interest + mandP, smsKop: c.smsKop, kind: "min" }));
+  }
+  return { rows, state };
+}
+function simulateItems(c, items) {
+  const state = initState(c);
+  const events = [{ date: c.start, balance: c.amountKop, cumInterest: 0 }];
+  const rows = [];
+  const sorted = items.slice().sort((a, b) => cmp(a.date, b.date) || String(a.id).localeCompare(String(b.id)));
+  for (const item of sorted) {
+    if (cmp(item.date, c.start) < 0) continue;
+    if (cmp(item.date, state.date) < 0) continue;
+    if (state.balance <= 0) {
+      rows.push({ ...item, applied: 0, unapplied: item.amountKop, balance: 0, interest: 0, toPrincipal: 0, skipped: true });
+      continue;
+    }
+    const row = applyPayment(c, state, item);
+    rows.push(row);
+    events.push({ date: item.date, balance: state.balance, cumInterest: state.cumInterest });
+  }
+  return { state, rows, events };
+}
+function projectForward(c, fromState) {
+  const state = {
+    balance: fromState.balance,
+    date: fromState.date,
+    cumInterest: fromState.cumInterest,
+    cumPaid: fromState.cumPaid,
+    cumSms: fromState.cumSms || 0,
+    unpaid: fromState.unpaid,
+  };
+  const rows = [];
+  const events = [];
+  let stuck = false;
+  for (let guard = 0; state.balance > 0 && guard < c.termMonths + 60; guard++) {
+    const due = nextDue(c, state.date);
+    if (!due) { stuck = true; break; }
+    const before = state.balance;
+    const row = applyPayment(c, state, { date: due.date, amountKop: c.monthlyKop, smsKop: c.smsKop, kind: "forecast" });
+    row.n = due.n;
+    rows.push(row);
+    events.push({ date: due.date, balance: state.balance, cumInterest: state.cumInterest });
+    if (state.balance >= before) { stuck = true; break; }
+  }
+  return { state, rows, events, stuck };
+}
+function valueAt(events, date) {
+  let found = null;
+  for (const e of events) {
+    if (cmp(e.date, date) <= 0) found = e;
+    else break;
+  }
+  return found;
+}
+function samePath(planEvents, realEvents) {
+  for (const e of planEvents) {
+    const real = valueAt(realEvents, e.date);
+    if (!real || Math.abs(real.balance - e.balance) > 0) return false;
+  }
+  const planEnd = planEvents[planEvents.length - 1];
+  const realEnd = realEvents[realEvents.length - 1];
+  return planEnd && realEnd && cmp(planEnd.date, realEnd.date) === 0;
+}
+
+function sanitizeSettings(raw) {
+  const d = DEFAULT_SETTINGS;
+  const amount = parseNum(raw.amount);
+  const monthly = parseNum(raw.monthly);
+  const rate1 = parseNum(raw.rate1);
+  const rate2 = parseNum(raw.rate2);
+  const start = parseISO(raw.start);
+  const paymentDay = Number(raw.paymentDay);
+  const preferentialDays = Number(raw.preferentialDays);
+  const graceMonths = Number(raw.graceMonths);
+  const termYears = Number(raw.termYears);
+  const sms = raw.sms == null || raw.sms === "" ? DEFAULT_SETTINGS.sms : parseNum(raw.sms);
+  if (amount == null || amount <= 0 || monthly == null || monthly <= 0) return { error: "Сумма кредита и плановый платёж должны быть больше нуля." };
+  if (sms == null || sms < 0 || sms > 50) return { error: "Комиссия за СМС — от 0 до 50 BYN." };
+  if (rate1 == null || rate2 == null || rate1 <= 0 || rate2 <= 0) return { error: "Ставки должны быть больше нуля." };
+  if (!start) return { error: "Проверьте дату выдачи." };
+  if (!Number.isInteger(paymentDay) || paymentDay < 1 || paymentDay > 31) return { error: "День платежа — от 1 до 31." };
+  if (!Number.isInteger(preferentialDays) || preferentialDays < 0) return { error: "Проверьте число льготных дней." };
+  if (!Number.isInteger(graceMonths) || graceMonths < 0) return { error: "Проверьте отсрочку." };
+  if (!Number.isInteger(termYears) || termYears < 1 || termYears > 40) return { error: "Срок договора — от 1 до 40 лет." };
+  return {
+    value: {
+      amount,
+      start: iso(start),
+      paymentDay,
+      rate1,
+      rate2,
+      preferentialDays,
+      graceMonths,
+      termYears,
+      yearBase: Number(raw.yearBase) === 360 ? 360 : 365,
+      monthly,
+      sms,
+    },
+  };
+}
+function formatInputMoney(kop) {
+  return (kop / 100).toFixed(2).replace(".", ",");
+}
+function debitKop(settings) {
+  return Math.round(Number(settings.monthly) * 100) + Math.round((Number(settings.sms) || 0) * 100);
+}
+function normalizePayment(p) {
+  if (!p) return null;
+  const date = parseISO(p.date);
+  let amountKop = null;
+  if (Number.isInteger(p.amountKop)) amountKop = p.amountKop;
+  else if (typeof p.amount === "number" && isFinite(p.amount)) amountKop = Math.round(p.amount * 100);
+  else if (typeof p.amount === "string") amountKop = parseMoney(p.amount);
+  if (!date || amountKop == null || amountKop <= 0 || !p.id) return null;
+  let smsKop = 0;
+  if (Number.isInteger(p.smsKop) && p.smsKop >= 0 && p.smsKop <= 100000) smsKop = p.smsKop;
+  else if (typeof p.sms === "number" && isFinite(p.sms) && p.sms >= 0) smsKop = Math.round(p.sms * 100);
+  if (smsKop > amountKop) smsKop = amountKop;
+  return { id: String(p.id), date: iso(date), amountKop, smsKop, note: String(p.note || "").slice(0, 200) };
+}
+function readStore() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "null"); }
+  catch (e) { return null; }
+}
+function load() {
+  const saved = readStore();
+  const savedPays = saved && Array.isArray(saved.payments) ? saved.payments : [];
+  const revChanged = !saved || saved.seedRev !== SEED_REV;
+  const deleted = new Set(revChanged ? [] : (saved?.deletedIds || []));
+  const seedIds = new Set(SEEDED_PAYMENTS.map((p) => p.id));
+  const map = new Map();
+  for (const p of SEEDED_PAYMENTS) {
+    const n = normalizePayment(p);
+    if (n && (revChanged || !deleted.has(n.id))) map.set(n.id, n);
+  }
+  for (const p of savedPays) {
+    const n = normalizePayment(p);
+    if (!n || deleted.has(n.id)) continue;
+    if (revChanged && seedIds.has(n.id)) continue;
+    map.set(n.id, n);
+  }
+  const settings = Object.assign({}, DEFAULT_SETTINGS, saved?.settings || {});
+  if (saved?.settings?.yearBase === 360) settings.yearBase = 360;
+  return {
+    settings,
+    payments: [...map.values()].sort(comparePay),
+    deletedIds: [...deleted],
+  };
+}
+function comparePay(a, b) {
+  return a.date < b.date ? -1 : a.date > b.date ? 1 : a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+}
+function save() {
+  if (remote && !editor) return;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      seedRev: SEED_REV,
+      settings: app.settings,
+      payments: app.payments,
+      deletedIds: app.deletedIds,
+    }));
+  } catch (e) { /* браузер может запретить хранилище */ }
+  if (remote) queuePush();
+}
+
+function svgEl(name, attrs) {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", name);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+  return el;
+}
+function renderChart(host, spec) {
+  host.replaceChildren();
+  const W = 760;
+  const H = 300;
+  const pad = { l: 74, r: 16, t: 16, b: 32 };
+  const plotW = W - pad.l - pad.r;
+  const plotH = H - pad.t - pad.b;
+  const span = Math.max(1, daysBetween(spec.x0, spec.x1));
+  let yMin = spec.yMin;
+  let yMax = spec.yMax === yMin ? yMin + 1 : spec.yMax;
+  const roughRub = Math.max((yMax - yMin) / 100 / 4, 0.01);
+  const pow = Math.pow(10, Math.floor(Math.log10(roughRub)));
+  const err = roughRub / pow;
+  const nice = err <= 1 ? 1 : err <= 2 ? 2 : err <= 2.5 ? 2.5 : err <= 5 ? 5 : 10;
+  let stepKop = Math.max(1, Math.round(nice * pow * 100));
+  yMin = Math.floor(yMin / stepKop) * stepKop;
+  yMax = Math.ceil(yMax / stepKop) * stepKop;
+  if (yMin === yMax) yMax += stepKop;
+  let guard = 0;
+  while (Math.round((yMax - yMin) / stepKop) > 6 && guard < 6) {
+    stepKop *= 2;
+    yMin = Math.floor(spec.yMin / stepKop) * stepKop;
+    yMax = Math.ceil((spec.yMax === spec.yMin ? spec.yMin + 1 : spec.yMax) / stepKop) * stepKop;
+    guard += 1;
+  }
+  const xOf = (date) => pad.l + plotW * Math.min(1, Math.max(0, daysBetween(spec.x0, date) / span));
+  const yOf = (kop) => pad.t + plotH * (1 - (kop - yMin) / (yMax - yMin));
+
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" });
+  const title = svgEl("title", {});
+  title.textContent = spec.aria;
+  svg.appendChild(title);
+
+  const tickCount = Math.round((yMax - yMin) / stepKop);
+  for (let i = 0; i <= tickCount; i++) {
+    const kop = yMin + stepKop * i;
+    const y = yOf(kop);
+    svg.appendChild(svgEl("line", { x1: pad.l, x2: W - pad.r, y1: y, y2: y, stroke: "#e4e4e7" }));
+    const label = svgEl("text", { x: pad.l - 8, y: y + 4, "text-anchor": "end", fill: "#52525b", "font-size": "11" });
+    label.textContent = axisLabel(kop, Math.max(Math.abs(yMin), Math.abs(yMax)));
+    svg.appendChild(label);
+  }
+  svg.appendChild(svgEl("line", { x1: pad.l, x2: pad.l, y1: pad.t, y2: H - pad.b, stroke: "#d4d4d8" }));
+  svg.appendChild(svgEl("line", { x1: pad.l, x2: W - pad.r, y1: H - pad.b, y2: H - pad.b, stroke: "#d4d4d8" }));
+
+  if (spec.zeroLine && yMin < 0 && yMax > 0) {
+    const y = yOf(0);
+    svg.appendChild(svgEl("line", { x1: pad.l, x2: W - pad.r, y1: y, y2: y, stroke: "#a1a1aa", "stroke-dasharray": "4 4" }));
+  }
+
+  const yearStep = (spec.x1.y - spec.x0.y) > 12 ? 5 : (spec.x1.y - spec.x0.y) > 8 ? 2 : 1;
+  let lastYearX = -999;
+  for (let y = spec.x0.y; y <= spec.x1.y; y += yearStep) {
+    const jan = { y, m: 1, d: 1 };
+    const date = cmp(jan, spec.x0) < 0 ? spec.x0 : jan;
+    if (cmp(date, spec.x1) > 0) continue;
+    const x = xOf(date);
+    if (x - lastYearX < 48) continue;
+    lastYearX = x;
+    const anchor = x < pad.l + 16 ? "start" : x > W - pad.r - 22 ? "end" : "middle";
+    const label = svgEl("text", { x, y: H - 10, "text-anchor": anchor, fill: "#52525b", "font-size": "11" });
+    label.textContent = String(y);
+    svg.appendChild(label);
+  }
+
+  function drawSeries(series) {
+    const pts = series.points;
+    if (!pts.length) return;
+    if (series.fill && pts.length > 1) {
+      let d = `M ${xOf(pts[0].date)} ${yOf(pts[0].kop)}`;
+      for (let i = 1; i < pts.length; i++) d += ` H ${xOf(pts[i].date)} V ${yOf(pts[i].kop)}`;
+      d += ` L ${xOf(pts[pts.length - 1].date)} ${yOf(0)} L ${xOf(pts[0].date)} ${yOf(0)} Z`;
+      svg.appendChild(svgEl("path", { d, fill: series.fill }));
+    }
+    const colorOf = series.colorOf || (() => series.color);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const x1 = xOf(pts[i].date);
+      const x2 = xOf(pts[i + 1].date);
+      const y1 = yOf(pts[i].kop);
+      const y2 = yOf(pts[i + 1].kop);
+      const color = colorOf(pts[i].kop);
+      const common = { stroke: color, "stroke-width": series.width || 2, "stroke-linecap": "square" };
+      if (series.dash) common["stroke-dasharray"] = series.dash;
+      svg.appendChild(svgEl("line", Object.assign({ x1, x2, y1, y2: y1 }, common)));
+      svg.appendChild(svgEl("line", Object.assign({ x1: x2, x2, y1, y2 }, common)));
+    }
+    if (pts.length === 1) {
+      svg.appendChild(svgEl("circle", { cx: xOf(pts[0].date), cy: yOf(pts[0].kop), r: 3, fill: series.color }));
+    }
+  }
+  for (const series of spec.series) drawSeries(series);
+
+  if (spec.today && cmp(spec.today, spec.x0) >= 0 && cmp(spec.today, spec.x1) <= 0) {
+    const x = xOf(spec.today);
+    if (x > pad.l + 14) {
+      svg.appendChild(svgEl("line", { x1: x, x2: x, y1: pad.t, y2: H - pad.b, stroke: "#71717a", "stroke-dasharray": "3 3" }));
+      const label = svgEl("text", {
+        x: Math.min(x + 6, W - pad.r - 52),
+        y: pad.t + 22,
+        "text-anchor": "start",
+        fill: "#3f3f46",
+        "font-size": "11",
+        stroke: "#fff",
+        "stroke-width": "4",
+        "paint-order": "stroke",
+      });
+      label.textContent = "сегодня";
+      svg.appendChild(label);
+    }
+  }
+
+  const hover = svgEl("line", { x1: 0, x2: 0, y1: pad.t, y2: H - pad.b, stroke: "#18181b", "stroke-width": "1", visibility: "hidden" });
+  svg.appendChild(hover);
+  const hit = svgEl("rect", { x: pad.l, y: pad.t, width: plotW, height: plotH, fill: "transparent" });
+  svg.appendChild(hit);
+  host.appendChild(svg);
+
+  const tip = document.createElement("div");
+  tip.className = "tip";
+  tip.hidden = true;
+  host.appendChild(tip);
+
+  function seriesValue(series, date) {
+    if (series.from && cmp(date, series.from) <= 0) return null;
+    if (series.until && cmp(date, series.until) > 0) return null;
+    let kop = null;
+    for (const p of series.points) {
+      if (cmp(p.date, date) <= 0) kop = p.kop;
+      else break;
+    }
+    return kop;
+  }
+  hit.addEventListener("mousemove", (event) => {
+    const rect = svg.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width * W;
+    if (x < pad.l || x > W - pad.r) { tip.hidden = true; hover.setAttribute("visibility", "hidden"); return; }
+    const day = Math.round((x - pad.l) / plotW * span);
+    const date = addDays(spec.x0, day);
+    hover.setAttribute("visibility", "visible");
+    hover.setAttribute("x1", xOf(date));
+    hover.setAttribute("x2", xOf(date));
+    const rows = [];
+    for (const series of spec.series) {
+      const kop = seriesValue(series, date);
+      if (kop == null) continue;
+      rows.push(`<div><span>${esc(series.name)}</span><span>${esc(money(kop))}</span></div>`);
+    }
+    tip.hidden = rows.length === 0;
+    tip.innerHTML = `<div class="d">${esc(longDate(date))}</div>` + rows.join("");
+    const box = host.getBoundingClientRect();
+    let left = event.clientX - box.left + 14;
+    let top = event.clientY - box.top + 14;
+    if (left + 200 > box.width) left = event.clientX - box.left - 210;
+    if (top + 90 > box.height) top = Math.max(8, event.clientY - box.top - 90);
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  });
+  hit.addEventListener("mouseleave", () => {
+    tip.hidden = true;
+    hover.setAttribute("visibility", "hidden");
+  });
+
+  if (spec.legend && spec.legend.length) {
+    const legend = document.createElement("div");
+    legend.className = "legend";
+    for (const item of spec.legend) {
+      const spanEl = document.createElement("span");
+      const sw = document.createElement("i");
+      sw.className = "swatch" + (item.dash ? " dash" : "");
+      sw.style.borderTopColor = item.color;
+      spanEl.append(sw, document.createTextNode(item.label));
+      legend.appendChild(spanEl);
+    }
+    host.appendChild(legend);
+  }
+}
+
+function deltaColor(kop) {
+  if (kop > 0) return "#b91c1c";
+  if (kop < 0) return "#15803d";
+  return "#71717a";
+}
+function uniqueDates(list) {
+  const out = [];
+  for (const d of list) {
+    if (!out.some((x) => cmp(x, d) === 0)) out.push(d);
+  }
+  out.sort(cmp);
+  return out;
+}
+
+const PLAN = "#1d4ed8";
+const FACT = "#c2410c";
+
+function render() {
+  const parsed = sanitizeSettings(app.settings);
+  const err = document.getElementById("settings-error");
+  if (parsed.error) {
+    err.textContent = parsed.error;
+    return;
+  }
+  err.textContent = "";
+  const settings = parsed.value;
+  app.settings = settings;
+  const c = contractFrom(settings);
+  const today = todayDate();
+  const plan = buildPlan(c);
+  const minimum = buildMinimum(c);
+  const journalItems = app.payments.map((p) => ({
+    id: p.id,
+    date: parseISO(p.date),
+    amountKop: p.amountKop,
+    smsKop: p.smsKop || 0,
+    smsFromGross: true,
+    note: p.note,
+    kind: "fact",
+  }));
+  const pastItems = journalItems.filter((p) => cmp(p.date, today) <= 0);
+  const past = simulateItems(c, pastItems);
+  const accrued = cmp(today, past.state.date) > 0 ? accrue(c, past.state.balance, past.state.date, today) : 0;
+  const forward = projectForward(c, simulateItems(c, journalItems).state);
+  const journalSim = simulateItems(c, journalItems);
+  const realEvents = journalSim.events.concat(forward.events);
+  const diverges = journalItems.length > 0 && !samePath(plan.events, realEvents);
+  const planEnd = plan.rows.length ? plan.rows[plan.rows.length - 1].date : c.start;
+  const realEnd = forward.state.balance === 0
+    ? forward.state.date
+    : (journalSim.state.balance === 0 ? journalSim.state.date : null);
+  const minEnd = minimum.rows.length ? minimum.rows[minimum.rows.length - 1].date : null;
+  const planNow = valueAt(plan.events, today);
+  const monthlyText = money(c.monthlyKop);
+
+  document.getElementById("subtitle").innerHTML =
+    `Белагропромбанк · выдан ${esc(longDate(c.start))} · ${esc(money(c.amountKop))} BYN · ${c.termMonths / 12} ${plural(c.termMonths / 12, "год", "года", "лет")} · ` +
+    `<a href="https://www.belapb.by/chastnomu-klientu/kredity/kredity-na-priobretenie-zhilya/">дифференцированный кредит на жильё</a>`;
+  document.getElementById("plan-note").textContent =
+    `Каждое ${c.paymentDay}-е число. Первые ${c.graceMonths} ${plural(c.graceMonths, "месяц", "месяца", "месяцев")} банк не требует основной долг, но всё сверх процентов его уменьшает.` +
+    (c.smsKop
+      ? ` Со счёта уходит ${money(c.monthlyKop + c.smsKop)} BYN: ${money(c.monthlyKop)} в кредит и ${money(c.smsKop)} за СМС.`
+      : "");
+
+  const useReal = journalItems.length > 0 && realEnd;
+  const headlineEnd = useReal ? realEnd : planEnd;
+  const headlineInterest = useReal ? forward.state.cumInterest : plan.state.cumInterest;
+  const headlineSms = useReal ? forward.state.cumSms : plan.state.cumSms;
+  const headlineOverpay = headlineInterest + headlineSms;
+  const planOverpay = plan.state.cumInterest + plan.state.cumSms;
+  const overDelta = useReal ? headlineOverpay - planOverpay : 0;
+  const headlinePaid = (useReal ? forward.state.cumPaid : plan.state.cumPaid) + headlineSms;
+  const debtDelta = past.state.balance - (planNow ? planNow.balance : c.amountKop);
+  const savedVsMin = minimum.state.cumInterest - plan.state.cumInterest;
+
+  const debtLines = [
+    `<li><span>проценты на сегодня</span><b>${esc(money(accrued))}</b></li>`,
+    `<li><span>закрыть сегодня</span><b>${esc(money(past.state.balance + accrued))}</b></li>`,
+    `<li><span>по плану сейчас</span><b>${esc(money(planNow ? planNow.balance : c.amountKop))}</b></li>`,
+  ];
+  if (journalItems.length) {
+    const word = debtDelta === 0 ? "<b>0,00</b>" : debtDelta > 0
+      ? `<b class="bad">+${esc(money(debtDelta))}</b>`
+      : `<b class="good">−${esc(money(-debtDelta))}</b>`;
+    debtLines.push(`<li><span>отклонение от плана</span>${word}</li>`);
+  }
+  if (journalItems.length > pastItems.length) {
+    const ahead = journalItems.length - pastItems.length;
+    debtLines.push(`<li><span>ещё не наступило</span><b>${ahead} ${plural(ahead, "платёж", "платежа", "платежей")}</b></li>`);
+  }
+
+  const interestLines = [
+    `<li><span>проценты</span><b>${esc(money(headlineInterest))}</b></li>`,
+    `<li><span>СМС</span><b>${esc(money(headlineSms))}</b></li>`,
+    `<li><span>всего списано</span><b>${esc(money(headlinePaid))}</b></li>`,
+  ];
+  if (useReal) {
+    const word = overDelta === 0 ? "<b>0,00</b>" : overDelta > 0
+      ? `<b class="bad">+${esc(money(overDelta))}</b>`
+      : `<b class="good">−${esc(money(-overDelta))}</b>`;
+    interestLines.push(`<li><span>план переплаты</span><b>${esc(money(planOverpay))}</b></li>`);
+    interestLines.push(`<li><span>отклонение от плана</span>${word}</li>`);
+    interestLines.push(`<li><span>уплачено процентов</span><b>${esc(money(past.state.cumInterest))}</b></li>`);
+    interestLines.push(`<li><span>уплачено СМС</span><b>${esc(money(past.state.cumSms || 0))}</b></li>`);
+  }
+  if (minimum.state.balance === 0) {
+    interestLines.push(`<li><span>минимум банка</span><b>${esc(money(minimum.state.cumInterest + minimum.state.cumSms))}</b></li>`);
+  }
+
+  const termLines = [];
+  const pathRows = useReal ? journalSim.rows.concat(forward.rows) : plan.rows;
+  if (pathRows.length) {
+    termLines.push(`<li><span>платежей</span><b>${pathRows.length}</b></li>`);
+    const last = pathRows[pathRows.length - 1];
+    if (last.charged !== c.monthlyKop + c.smsKop) termLines.push(`<li><span>последний</span><b>${esc(money(last.charged))}</b></li>`);
+  }
+  if (useReal && cmp(realEnd, planEnd) !== 0) {
+    const ahead = cmp(planEnd, realEnd) > 0;
+    const text = spanText(realEnd, planEnd);
+    termLines.push(`<li><span>против плана</span><b class="${ahead ? "good" : "bad"}">${ahead ? "раньше" : "позже"} на ${esc(text)}</b></li>`);
+    termLines.push(`<li><span>план закрылся бы</span><b>${esc(longDate(planEnd))}</b></li>`);
+  }
+  if (minEnd && plan.state.balance === 0) {
+    termLines.push(`<li><span>договор до</span><b>${esc(longDate(minEnd))}</b></li>`);
+    termLines.push(`<li><span>раньше договора</span><b class="good">${esc(spanText(planEnd, minEnd))}</b></li>`);
+    termLines.push(`<li><span>экономия процентов</span><b>${esc(money(savedVsMin))}</b></li>`);
+    if (c.smsKop) termLines.push(`<li><span>экономия на СМС</span><b>${esc(money((minimum.state.cumSms || 0) - plan.state.cumSms))}</b></li>`);
+  }
+
+  const termValue = plan.state.balance === 0 || (useReal && realEnd)
+    ? esc(longDate(headlineEnd))
+    : "не закрывается";
+  const termSub = plan.state.balance === 0
+    ? esc(spanText(c.start, headlineEnd)) + (useReal ? " · журнал и дальше по плану" : " · это план")
+    : "плановый платёж не покрывает проценты";
+
+  document.getElementById("stats").innerHTML = `
+    <article class="card">
+      <div class="k">Текущий основной долг</div>
+      <div class="v">${esc(money(past.state.balance))}</div>
+      <div class="s muted">на ${esc(longDate(today))} по журналу${pastItems.length ? "" : ", платежей ещё не было"}</div>
+      <ul>${debtLines.join("")}</ul>
+    </article>
+    <article class="card cost">
+      <div class="k">Общая переплата</div>
+      <div class="v">${plan.stuck && !useReal ? "—" : esc(money(headlineOverpay))}</div>
+      <div class="s muted">${useReal ? "проценты и СМС: журнал и дальше по " + esc(monthlyText) + " BYN" : "проценты и СМС за весь срок плана"}</div>
+      <ul>${interestLines.join("")}</ul>
+    </article>
+    <article class="card time">
+      <div class="k">Срок погашения</div>
+      <div class="v" style="font-size:22px">${termValue}</div>
+      <div class="s muted">${termSub}</div>
+      <ul>${termLines.join("")}</ul>
+    </article>`;
+
+  const missed = plan.rows.filter((row, index) => {
+    if (cmp(row.date, today) > 0) return false;
+    return !journalItems.some((p) => inPeriod(p.date, row, index === 0));
+  });
+  const banner = document.getElementById("banner");
+  if (plan.stuck) {
+    banner.className = "banner";
+    banner.innerHTML = "<strong>Плановый платёж не покрывает проценты.</strong><span>Долг при такой сумме не уменьшается. Поднимите плановый платёж.</span>";
+  } else if (missed.length) {
+    const shown = missed.slice(0, 4).map((r) => longDate(r.date)).join(", ");
+    const more = missed.length > 4 ? ` и ещё ${missed.length - 4}` : "";
+    banner.className = "banner";
+    banner.innerHTML = `<strong>В журнале нет ${missed.length === 1 ? "платежа" : "платежей"}: ${esc(shown)}${esc(more)}.</strong><span>Пока записи нет, расчёт считает, что этого платежа не было. Долг и отклонение из‑за этого завышены.</span>`;
+  } else if (plan.rows.length && !planIntegrity(plan, c.amountKop)) {
+    banner.className = "banner";
+    banner.innerHTML = "<strong>Сумма погашения долга не сходится.</strong><span>График нужно перепроверить: округление или срок посчитаны не до конца.</span>";
+  } else {
+    banner.className = "";
+    banner.innerHTML = "";
+  }
+
+  const nextHost = document.getElementById("next");
+  if (past.state.balance <= 0) {
+    nextHost.innerHTML = "<strong>Основной долг по журналу погашен.</strong>";
+  } else if (missed.length) {
+    const preview = previewPayment(c, past.state, today);
+    const debitText = money(c.monthlyKop + preview.sms);
+    const extra = preview.stuck
+      ? ` Платежа ${monthlyText} BYN в кредит не хватает на проценты ${money(preview.interest)} BYN.`
+      : ` В долг уйдёт ${money(preview.toPrincipal)} BYN, остаток станет ${money(preview.balance)} BYN.`;
+    const smsNote = preview.sms ? ` Списание ${debitText} BYN, из них ${money(preview.sms)} — СМС.` : "";
+    nextHost.innerHTML = `<strong>Платёж ${esc(longDate(missed[0].date))} ещё не записан.</strong> ` +
+      `Если сегодня направить в кредит ${esc(monthlyText)} BYN, проценты будут ${esc(money(preview.interest))} ` +
+      `за ${preview.days} ${plural(preview.days, "день", "дня", "дней")}.` + esc(extra + smsNote);
+  } else {
+    const due = nextDue(c, later(today, past.state.date));
+    const dueIndex = due ? plan.rows.findIndex((row) => cmp(row.date, due.date) === 0) : -1;
+    const logged = dueIndex >= 0
+      ? journalItems.filter((p) => inPeriod(p.date, plan.rows[dueIndex], dueIndex === 0))
+      : [];
+    if (!due) {
+      nextHost.innerHTML = "<strong>Следующей даты платежа в пределах срока нет.</strong> Остаток " + esc(money(past.state.balance)) + " BYN.";
+    } else if (logged.length) {
+      const sum = logged.reduce((s, p) => s + p.amountKop, 0);
+      const after = valueAt(journalSim.events, due.date);
+      const days = daysBetween(today, due.date);
+      const when = days === 0 ? "сегодня" : `через ${days} ${plural(days, "день", "дня", "дней")}`;
+      nextHost.innerHTML = `<strong>На ${esc(longDate(due.date))} в журнале ${esc(money(sum))} BYN</strong> (${when}). ` +
+        `Остаток после этой записи — ${esc(money(after ? after.balance : 0))} BYN.`;
+    } else {
+      const preview = previewPayment(c, past.state, due.date);
+      const days = daysBetween(today, due.date);
+      const when = days === 0 ? "сегодня" : `через ${days} ${plural(days, "день", "дня", "дней")}`;
+      const extra = preview.stuck
+        ? ` Платежа ${monthlyText} BYN в кредит не хватает на проценты ${money(preview.interest)} BYN.`
+        : ` В долг уйдёт ${money(preview.toPrincipal)} BYN, остаток станет ${money(preview.balance)} BYN.`;
+      const smsNote = preview.sms ? ` Списание ${money(preview.charged)} BYN, из них ${money(preview.sms)} — СМС.` : "";
+      nextHost.innerHTML = `<strong>Следующий платёж ${esc(longDate(due.date))}</strong> (${when}). ` +
+        `В кредит пойдёт ${esc(monthlyText)} BYN, проценты ${esc(money(preview.interest))} за ${preview.days} ${plural(preview.days, "день", "дня", "дней")}.` +
+        esc(extra + smsNote);
+    }
+  }
+
+  const x1 = realEnd && cmp(realEnd, planEnd) > 0 ? realEnd : planEnd;
+  const lastFactDate = journalItems.length ? journalItems[journalItems.length - 1].date : null;
+  let factUntil = null;
+  if (lastFactDate) {
+    factUntil = later(lastFactDate, earlier(today, x1));
+    if (cmp(factUntil, x1) > 0) factUntil = x1;
+  }
+  const factPoints = journalSim.events
+    .filter((e) => !factUntil || cmp(e.date, factUntil) <= 0)
+    .map((e) => ({ date: e.date, kop: e.balance }));
+  if (factUntil && factPoints.length && cmp(factPoints[factPoints.length - 1].date, factUntil) < 0 && cmp(factUntil, x1) <= 0) {
+    factPoints.push({ date: factUntil, kop: factPoints[factPoints.length - 1].kop });
+  }
+  const forecastPoints = [];
+  if (diverges && factPoints.length) {
+    const anchor = factPoints[factPoints.length - 1];
+    forecastPoints.push({ date: anchor.date, kop: anchor.kop });
+    for (const e of forward.events) {
+      if (cmp(e.date, anchor.date) > 0) forecastPoints.push({ date: e.date, kop: e.balance });
+    }
+  }
+  const planBalance = plan.events.map((e) => ({ date: e.date, kop: e.balance }));
+  const planInterest = plan.events.map((e) => ({ date: e.date, kop: e.cumInterest }));
+  const factInterest = journalSim.events
+    .filter((e) => !factUntil || cmp(e.date, factUntil) <= 0)
+    .map((e) => ({ date: e.date, kop: e.cumInterest }));
+  const forecastInterest = [];
+  if (diverges && factInterest.length) {
+    const anchor = factInterest[factInterest.length - 1];
+    forecastInterest.push({ date: anchor.date, kop: anchor.kop });
+    for (const e of forward.events) {
+      if (cmp(e.date, anchor.date) > 0) forecastInterest.push({ date: e.date, kop: e.cumInterest });
+    }
+  }
+
+  const yTop = Math.max(c.amountKop, ...planBalance.map((p) => p.kop), ...factPoints.map((p) => p.kop));
+  const legend = [{ color: PLAN, label: "План " + monthlyText + " BYN" }];
+  if (diverges) {
+    legend.push({ color: FACT, label: "Факт по журналу" });
+    legend.push({ color: FACT, dash: true, label: "Дальше по " + monthlyText });
+  }
+
+  document.getElementById("cap-balance").textContent = diverges
+    ? "Остаток после платежа. Пунктир — если после последней записи и дальше платить по плану."
+    : journalItems.length
+      ? "Журнал совпадает с планом, поэтому на графике одна линия."
+      : "Остаток после каждого планового платежа. Вторая линия появится, когда факт разойдётся с планом.";
+  renderChart(document.getElementById("chart-balance"), {
+    aria: "Остаток основного долга. План снижается до нуля к " + longDate(planEnd) + ".",
+    x0: c.start,
+    x1,
+    yMin: 0,
+    yMax: yTop,
+    today,
+    zeroLine: false,
+    legend,
+    series: [
+      { name: "План", color: PLAN, fill: "rgba(29,78,216,0.08)", points: planBalance },
+      diverges ? { name: "Факт", color: FACT, points: factPoints, until: factUntil } : null,
+      diverges ? { name: "Прогноз", color: FACT, dash: "5 4", points: forecastPoints, from: factUntil } : null,
+    ].filter(Boolean),
+  });
+
+  const deltaDates = uniqueDates([
+    ...plan.events.map((e) => e.date),
+    ...realEvents.map((e) => e.date),
+  ]).filter((d) => cmp(d, c.start) >= 0);
+  const deltaPoints = deltaDates.map((date) => {
+    const f = valueAt(realEvents, date);
+    const p = valueAt(plan.events, date);
+    return { date, kop: (f ? f.balance : 0) - (p ? p.balance : 0) };
+  });
+  const deltaKnown = factUntil ? deltaPoints.filter((p) => cmp(p.date, factUntil) <= 0) : [];
+  const deltaForecast = factUntil ? deltaPoints.filter((p) => cmp(p.date, factUntil) >= 0) : [];
+  const deltaAbs = deltaPoints.reduce((m, p) => Math.max(m, Math.abs(p.kop)), 0);
+  const deltaPad = deltaAbs === 0 ? 100000 : Math.max(10000, Math.round(deltaAbs * 0.12));
+  document.getElementById("cap-delta").textContent = journalItems.length
+    ? "Факт минус план. Ниже нуля — долг меньше, чем по плану. Сплошная линия — уже записанные платежи, пунктир — если дальше платить плановую сумму."
+    : "Когда в журнале появится первый платёж, здесь будет разница остатков. Сейчас отклонения нет.";
+  const deltaHost = document.getElementById("chart-delta");
+  if (!journalItems.length) {
+    deltaHost.replaceChildren();
+    const empty = document.createElement("p");
+    empty.className = "empty muted";
+    empty.textContent = "0,00 BYN — факт ещё не внесён, линия плана и есть ожидание.";
+    deltaHost.appendChild(empty);
+  } else {
+    renderChart(deltaHost, {
+      aria: "Отклонение остатка долга от плана в белорусских рублях.",
+      x0: c.start,
+      x1,
+      yMin: -deltaAbs - deltaPad,
+      yMax: deltaAbs + deltaPad,
+      today,
+      zeroLine: true,
+      legend: (function () {
+        const sample = deltaPoints.reduce((best, p) => Math.abs(p.kop) > Math.abs(best) ? p.kop : best, 0);
+        const color = deltaColor(sample);
+        return deltaForecast.length > 1 ? [
+          { color, label: "По журналу" },
+          { color, dash: true, label: "Дальше по плану" },
+        ] : [{ color, label: "Факт − план" }];
+      })(),
+      series: [
+        { name: "По журналу", color: "#71717a", colorOf: deltaColor, points: deltaKnown },
+        deltaForecast.length > 1 ? { name: "Прогноз", color: "#71717a", colorOf: deltaColor, dash: "5 4", points: deltaForecast, from: factUntil } : null,
+      ].filter(Boolean),
+    });
+  }
+
+  const interestTop = Math.max(
+    plan.state.cumInterest,
+    forward.state.cumInterest,
+    1,
+  );
+  document.getElementById("cap-interest").textContent = "Сумма процентов с выдачи кредита. Комиссия за СМС в эту линию не входит: она есть в карточке переплаты.";
+  renderChart(document.getElementById("chart-interest"), {
+    aria: "Накопленные проценты. По плану " + money(plan.state.cumInterest) + " BYN.",
+    x0: c.start,
+    x1,
+    yMin: 0,
+    yMax: interestTop,
+    today,
+    zeroLine: false,
+    legend,
+    series: [
+      { name: "План", color: PLAN, fill: "rgba(29,78,216,0.08)", points: planInterest },
+      diverges ? { name: "Факт", color: FACT, points: factInterest, until: factUntil } : null,
+      diverges ? { name: "Прогноз", color: FACT, dash: "5 4", points: forecastInterest, from: factUntil } : null,
+    ].filter(Boolean),
+  });
+
+  renderJournal();
+  renderTable(c, plan, journalItems, today);
+  const smsText = document.getElementById("pay-sms-text");
+  const smsLabel = document.getElementById("pay-sms-label");
+  if (c.smsKop) {
+    smsLabel.hidden = false;
+    smsText.textContent = `из суммы ${money(c.smsKop)} BYN — комиссия за СМС, она не гасит долг`;
+  } else {
+    smsLabel.hidden = true;
+  }
+  document.getElementById("table-note").textContent = plan.rows.length
+    ? `Обязательная доля основного долга после отсрочки — ${money(c.installmentKop)} BYN в месяц, без пересчёта после досрочки. «Досрочно» — насколько план гасит долг быстрее этой доли.` +
+      (c.smsKop ? ` Колонка «Платёж» — списание со счёта, вместе с СМС ${money(c.smsKop)} BYN.` : "")
+    : "";
+  document.getElementById("assumptions").innerHTML =
+    `<p>Проценты: остаток × ставка × фактические дни / ${c.yearBase}. День выдачи входит в первый период, день платежа относится к следующему. ` +
+    `Ставка ${esc(formatPercent(c.rate1))} действует ${c.preferentialDays} дней, с ${esc(longDate(c.rateChange))} — ${esc(formatPercent(c.rate2))}. ` +
+    `Високосный год на базу ${c.yearBase} не влияет. Копейки округляются по каждому отрезку ставки.</p>` +
+    (c.smsKop
+      ? `<p>Каждый месячный платёж банк увеличивает на ${esc(money(c.smsKop))} BYN за СМС. Комиссия не гасит ни проценты, ни долг, поэтому срок от неё не меняется, а переплата растёт. ` +
+        `Плановые ${esc(money(c.monthlyKop))} BYN идут в кредит целиком. В журнале пишется сумма списания: галочка отделяет комиссию.</p>`
+      : "") +
+    `<p>Если декабрьская выписка не сойдётся с первым платежом в таблице, переключите базу на 360 в условиях. ` +
+    `Банк может иначе учесть день выдачи. Это ориентир для сравнения плана и факта, не платёжный график банка.</p>` +
+    (minimum.state.balance === 0
+      ? `<p>Обязательный график без досрочки: ${minimum.rows.length} ${plural(minimum.rows.length, "платёж", "платежа", "платежей")} до ${esc(longDate(minEnd))}, проценты ${esc(money(minimum.state.cumInterest))} BYN${minimum.state.cumSms ? `, СМС ${esc(money(minimum.state.cumSms))} BYN` : ""}.</p>`
+      : "");
+  lockForms();
+}
+
+function planIntegrity(plan, amountKop) {
+  if (plan.state.balance !== 0) return false;
+  let balance = amountKop;
+  for (const row of plan.rows) {
+    balance -= row.toPrincipal;
+    if (balance !== row.balance) return false;
+  }
+  return balance === 0;
+}
+function inPeriod(date, row, isFirst) {
+  if (isFirst) return cmp(date, row.from) >= 0 && cmp(date, row.date) <= 0;
+  return cmp(date, row.from) > 0 && cmp(date, row.date) <= 0;
+}
+function renderJournal() {
+  const list = document.getElementById("journal");
+  list.replaceChildren();
+  if (!app.payments.length) {
+    const li = document.createElement("li");
+    li.className = "empty muted";
+    li.style.display = "block";
+    li.textContent = "Пока пусто. После первого реального платежа добавьте дату и сумму — графики покажут отклонение.";
+    list.appendChild(li);
+    return;
+  }
+  const today = todayDate();
+  for (const p of app.payments) {
+    const li = document.createElement("li");
+    li.dataset.id = p.id;
+    const date = document.createElement("div");
+    const d = parseISO(p.date);
+    date.textContent = d.d + "." + pad(d.m) + "." + d.y;
+    if (cmp(d, today) > 0) {
+      const b = document.createElement("div");
+      b.className = "subn";
+      b.textContent = "ещё впереди";
+      date.appendChild(b);
+    }
+    const amt = document.createElement("div");
+    amt.className = "amt";
+    amt.textContent = money(p.amountKop) + " BYN";
+    if (p.smsKop) {
+      const fee = document.createElement("div");
+      fee.className = "subn";
+      fee.textContent = "СМС " + money(p.smsKop);
+      amt.appendChild(fee);
+    }
+    const note = document.createElement("div");
+    note.className = "muted";
+    note.textContent = p.note || "";
+    const actions = document.createElement("div");
+    actions.innerHTML = `<button type="button" data-act="edit">Изменить</button> <button type="button" class="danger" data-act="del">Удалить</button>`;
+    li.append(date, amt, note, actions);
+    list.appendChild(li);
+  }
+}
+function renderTable(c, plan, journalItems, today) {
+  const events = simulateItems(c, journalItems).events;
+  const lastPay = journalItems.length ? journalItems[journalItems.length - 1].date : null;
+  let html = `<table><thead><tr>
+    <th>Дата</th><th class="n">Дней</th><th>Ставка</th>
+    <th class="n" title="Проценты за период">Проценты</th>
+    <th class="n" title="Сколько из планового платежа гасит долг">В долг</th>
+    <th class="n">Платёж</th>
+    <th class="n">Остаток</th>
+    <th class="n">Факт</th>
+    <th class="n">Остаток факта</th>
+    <th class="n" title="Остаток факта минус остаток плана">Δ долга</th>
+  </tr></thead><tbody>`;
+  plan.rows.forEach((row, index) => {
+    const pays = journalItems.filter((p) => inPeriod(p.date, row, index === 0));
+    const showFact = pays.length > 0 || cmp(row.date, today) <= 0;
+    const fact = showFact ? valueAt(events, row.date) : null;
+    const delta = fact ? fact.balance - row.balance : null;
+    const classes = [];
+    if (row.grace) classes.push("grace");
+    if (cmp(row.date, today) < 0) classes.push("past");
+    if (index === plan.rows.findIndex((r) => cmp(r.date, today) >= 0)) classes.push("next");
+    const factText = pays.length
+      ? pays.map((p) => {
+          const d = p.date;
+          const label = cmp(d, row.date) === 0 ? money(p.amountKop) : shortDate(d) + " · " + money(p.amountKop);
+          return esc(label);
+        }).join("<br>")
+      : (showFact ? "—" : "—");
+    const early = row.early > 0
+      ? `<span class="subn">досрочно ${esc(money(row.early))}</span>`
+      : row.early < 0
+        ? `<span class="subn bad">меньше доли на ${esc(money(-row.early))}</span>`
+        : "";
+    const grace = row.grace ? `<span class="subn">отсрочка</span>` : "";
+    const rateMark = row.rates.d1 && row.rates.d2 ? `<span class="subn">смена ставки</span>` : "";
+    html += `<tr class="${classes.join(" ")}">
+      <td>${esc(shortDate(row.date))}${grace}</td>
+      <td class="n">${row.days}</td>
+      <td>${esc(row.rateLabel)}${rateMark}</td>
+      <td class="n">${esc(money(row.interest))}</td>
+      <td class="n">${esc(money(row.toPrincipal))}${early}</td>
+      <td class="n">${esc(money(row.applied + row.sms))}${row.sms ? `<span class="subn">СМС ${esc(money(row.sms))}</span>` : ""}</td>
+      <td class="n">${esc(money(row.balance))}</td>
+      <td class="n">${factText}</td>
+      <td class="n">${fact ? esc(money(fact.balance)) : "—"}</td>
+      <td class="n ${delta > 0 ? "bad" : delta < 0 ? "good" : ""}">${delta == null ? "—" : (delta > 0 ? "+" : "") + esc(money(delta))}</td>
+    </tr>`;
+  });
+  html += "</tbody></table>";
+  document.getElementById("table-wrap").innerHTML = html;
+}
+
+let app = load();
+let editingId = null;
+let timer = 0;
+let remote = false;
+let editor = false;
+let booting = true;
+let updatedAt = null;
+let saveQueue = Promise.resolve();
+
+function canEdit() {
+  return !booting && (!remote || editor);
+}
+function setAuthError(text) {
+  const el = document.getElementById("auth-error");
+  if (el) el.textContent = text || "";
+}
+function lockForms() {
+  const locked = !canEdit();
+  for (const id of ["monthly", "set-amount", "set-start", "set-day", "set-rate1", "set-rate2", "set-days", "set-grace", "set-years", "set-base", "set-sms", "pay-date", "pay-amount", "pay-note", "pay-sms", "pay-submit", "import", "reset-settings", "clear-journal"]) {
+    const el = document.getElementById(id);
+    if (el) el.disabled = locked;
+  }
+  document.querySelectorAll("#journal button").forEach((button) => { button.disabled = locked; });
+}
+function updateAuthUi() {
+  const status = document.getElementById("auth-status");
+  const form = document.getElementById("login-form");
+  const logout = document.getElementById("logout");
+  if (booting) {
+    status.textContent = "Загрузка журнала…";
+    form.hidden = true;
+    logout.hidden = true;
+    lockForms();
+    return;
+  }
+  if (!remote) {
+    status.textContent = "Файл открыт с диска: журнал только в этом браузере. На сайте его видят оба, а правки закрыты паролем.";
+    form.hidden = true;
+    logout.hidden = true;
+  } else if (editor) {
+    status.textContent = "Правки включены, пока браузер не закрыт. После выхода или закрытия браузера пароль спросится снова.";
+    form.hidden = true;
+    logout.hidden = false;
+  } else {
+    status.textContent = "Цифры общие. Добавлять, менять и удалять можно после пароля — он держится одну сессию браузера.";
+    form.hidden = false;
+    logout.hidden = true;
+  }
+  lockForms();
+}
+async function api(path, options) {
+  const res = await fetch(path, Object.assign({ credentials: "include" }, options || {}, {
+    headers: Object.assign({ "content-type": "application/json" }, options && options.headers),
+  }));
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const error = new Error(data.error || "Не удалось связаться с журналом.");
+    error.status = res.status;
+    throw error;
+  }
+  return data;
+}
+function applyRemoteState(data) {
+  const settings = Object.assign({}, DEFAULT_SETTINGS, data.settings || {});
+  if (data.settings && Number(data.settings.yearBase) === 360) settings.yearBase = 360;
+  const parsed = sanitizeSettings(settings);
+  app.settings = parsed.value || Object.assign({}, DEFAULT_SETTINGS);
+  app.payments = (Array.isArray(data.payments) ? data.payments : []).map(normalizePayment).filter(Boolean).sort(comparePay);
+  app.deletedIds = Array.isArray(data.deletedIds) ? data.deletedIds.map(String) : [];
+  updatedAt = data.updatedAt || null;
+}
+function queuePush() {
+  saveQueue = saveQueue.then(() => pushState(), () => pushState());
+}
+async function pushState() {
+  const sent = updatedAt;
+  try {
+    const data = await api("/api/state", {
+      method: "PUT",
+      body: JSON.stringify({
+        settings: app.settings,
+        payments: app.payments,
+        deletedIds: app.deletedIds,
+        updatedAt: sent,
+      }),
+    });
+    updatedAt = data.updatedAt;
+    setAuthError("");
+  } catch (error) {
+    if (error.status === 401) {
+      editor = false;
+      setAuthError("Сессия закончилась. Войдите снова: последняя правка не сохранилась.");
+      updateAuthUi();
+      return;
+    }
+    if (error.status === 409) {
+      setAuthError("Журнал уже изменён в другом окне. Обновите страницу, чтобы не затереть запись.");
+      return;
+    }
+    setAuthError(error.message || "Не удалось сохранить.");
+  }
+}
+
+function fillForms() {
+  document.getElementById("monthly").value = String(app.settings.monthly).replace(".", ",");
+  document.getElementById("set-amount").value = String(app.settings.amount);
+  document.getElementById("set-start").value = app.settings.start;
+  document.getElementById("set-day").value = String(app.settings.paymentDay);
+  document.getElementById("set-rate1").value = String(app.settings.rate1).replace(".", ",");
+  document.getElementById("set-rate2").value = String(app.settings.rate2).replace(".", ",");
+  document.getElementById("set-days").value = String(app.settings.preferentialDays);
+  document.getElementById("set-grace").value = String(app.settings.graceMonths);
+  document.getElementById("set-years").value = String(app.settings.termYears);
+  document.getElementById("set-base").value = String(app.settings.yearBase);
+  document.getElementById("set-sms").value = String(app.settings.sms).replace(".", ",");
+  const parsed = sanitizeSettings(app.settings);
+  document.getElementById("pay-amount").value = formatInputMoney(debitKop(parsed.value || app.settings));
+  if (!parsed.value) {
+    document.getElementById("pay-date").value = app.settings.start;
+    return;
+  }
+  const c = contractFrom(parsed.value);
+  const open = buildPlan(c).rows.find((row, index) => !app.payments.some((p) => {
+    const d = parseISO(p.date);
+    return d && inPeriod(d, row, index === 0);
+  }));
+  document.getElementById("pay-date").value = iso(open ? open.date : paymentDate(c, 1));
+}
+function readSettingsFromForm() {
+  return sanitizeSettings({
+    amount: document.getElementById("set-amount").value,
+    start: document.getElementById("set-start").value,
+    paymentDay: document.getElementById("set-day").value,
+    rate1: document.getElementById("set-rate1").value,
+    rate2: document.getElementById("set-rate2").value,
+    preferentialDays: document.getElementById("set-days").value,
+    graceMonths: document.getElementById("set-grace").value,
+    termYears: document.getElementById("set-years").value,
+    yearBase: document.getElementById("set-base").value,
+    monthly: document.getElementById("monthly").value,
+    sms: document.getElementById("set-sms").value,
+  });
+}
+function commitSettings() {
+  if (!canEdit()) return;
+  const parsed = readSettingsFromForm();
+  const err = document.getElementById("settings-error");
+  if (parsed.error) {
+    err.textContent = parsed.error;
+    return;
+  }
+  err.textContent = "";
+  app.settings = parsed.value;
+  save();
+  render();
+}
+function scheduleCommit() {
+  clearTimeout(timer);
+  timer = setTimeout(commitSettings, 250);
+}
+
+function boot() {
+  fillForms();
+  render();
+  for (const id of ["monthly", "set-amount", "set-start", "set-day", "set-rate1", "set-rate2", "set-days", "set-grace", "set-years", "set-base", "set-sms"]) {
+    document.getElementById(id).addEventListener("input", scheduleCommit);
+    document.getElementById(id).addEventListener("change", commitSettings);
+  }
+  document.getElementById("pay-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!canEdit()) return;
+    const date = parseISO(document.getElementById("pay-date").value);
+    const amountKop = parseMoney(document.getElementById("pay-amount").value);
+    const note = document.getElementById("pay-note").value.trim();
+    const start = parseISO(app.settings.start);
+    const smsKop = document.getElementById("pay-sms").checked ? Math.round((Number(app.settings.sms) || 0) * 100) : 0;
+    if (!date || amountKop == null || amountKop <= 0) return;
+    if (smsKop >= amountKop) {
+      alert("Сумма должна быть больше комиссии за СМС, иначе в кредит не попадёт ничего.");
+      return;
+    }
+    if (start && cmp(date, start) < 0) {
+      alert("Дата платежа раньше выдачи кредита.");
+      return;
+    }
+    if (editingId) {
+      const item = app.payments.find((p) => p.id === editingId);
+      if (item) {
+        item.date = iso(date);
+        item.amountKop = amountKop;
+        item.smsKop = smsKop;
+        item.note = note;
+      }
+    } else {
+      app.payments.push({ id: crypto.randomUUID(), date: iso(date), amountKop, smsKop, note });
+    }
+    app.payments.sort(comparePay);
+    editingId = null;
+    document.getElementById("pay-note").value = "";
+    document.getElementById("pay-sms").checked = true;
+    document.getElementById("pay-submit").textContent = "Добавить";
+    document.getElementById("pay-cancel").hidden = true;
+    save();
+    render();
+    const c = contractFrom(app.settings);
+    const open = buildPlan(c).rows.find((row, index) => !app.payments.some((p) => inPeriod(parseISO(p.date), row, index === 0)));
+    document.getElementById("pay-date").value = iso(open ? open.date : todayDate());
+    document.getElementById("pay-amount").value = formatInputMoney(debitKop(app.settings));
+  });
+  document.getElementById("pay-cancel").addEventListener("click", () => {
+    editingId = null;
+    document.getElementById("pay-note").value = "";
+    document.getElementById("pay-submit").textContent = "Добавить";
+    document.getElementById("pay-cancel").hidden = true;
+  });
+  document.getElementById("journal").addEventListener("click", (event) => {
+    const btn = event.target.closest("button");
+    if (!btn) return;
+    if (!canEdit()) return;
+    const id = btn.closest("[data-id]").dataset.id;
+    if (btn.dataset.act === "del") {
+      const item = app.payments.find((p) => p.id === id);
+      if (!item || !confirm("Удалить платёж " + item.date + " на " + money(item.amountKop) + " BYN?")) return;
+      if (SEEDED_PAYMENTS.some((p) => p.id === id) && !app.deletedIds.includes(id)) app.deletedIds.push(id);
+      app.payments = app.payments.filter((p) => p.id !== id);
+      if (editingId === id) document.getElementById("pay-cancel").click();
+      save();
+      render();
+    }
+    if (btn.dataset.act === "edit") {
+      const item = app.payments.find((p) => p.id === id);
+      if (!item) return;
+      editingId = id;
+      document.getElementById("pay-date").value = item.date;
+      document.getElementById("pay-amount").value = formatInputMoney(item.amountKop);
+      document.getElementById("pay-sms").checked = item.smsKop > 0;
+      document.getElementById("pay-note").value = item.note;
+      document.getElementById("pay-submit").textContent = "Сохранить";
+      document.getElementById("pay-cancel").hidden = false;
+      document.getElementById("pay-amount").focus();
+    }
+  });
+  document.getElementById("export").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify({
+      monthly: app.settings.monthly,
+      yearBase: app.settings.yearBase,
+      payments: app.payments.map((p) => ({ id: p.id, date: p.date, amount: p.amountKop / 100, sms: (p.smsKop || 0) / 100, note: p.note })),
+    }, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "kredit-200000-zhurnal.json";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+  });
+  document.getElementById("import").addEventListener("click", () => document.getElementById("import-file").click());
+  document.getElementById("import-file").addEventListener("change", () => {
+    if (!canEdit()) return;
+    const file = document.getElementById("import-file").files[0];
+    document.getElementById("import-file").value = "";
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      let data;
+      try { data = JSON.parse(String(reader.result)); }
+      catch (e) { alert("Файл не похож на журнал."); return; }
+      const incoming = (Array.isArray(data) ? data : data.payments || []).map(normalizePayment).filter(Boolean);
+      if (!incoming.length) { alert("В файле нет платежей."); return; }
+      if (!confirm("Заменить журнал " + incoming.length + " " + plural(incoming.length, "платежом", "платежами", "платежами") + "?")) return;
+      app.payments = incoming.sort(comparePay);
+      app.deletedIds = SEEDED_PAYMENTS.map((p) => p.id).filter((id) => !app.payments.some((p) => p.id === id));
+      if (data.monthly) app.settings.monthly = data.monthly;
+      if (data.yearBase === 360 || data.yearBase === 365) app.settings.yearBase = data.yearBase;
+      fillForms();
+      save();
+      render();
+    };
+    reader.readAsText(file);
+  });
+  document.getElementById("reset-settings").addEventListener("click", () => {
+    if (!canEdit()) return;
+    if (!confirm("Вернуть сумму, ставки, даты и платёж 3 500 BYN? Журнал не сотрётся.")) return;
+    const payments = app.payments;
+    const deletedIds = app.deletedIds;
+    app.settings = Object.assign({}, DEFAULT_SETTINGS);
+    app.payments = payments;
+    app.deletedIds = deletedIds;
+    fillForms();
+    save();
+    render();
+  });
+  document.getElementById("clear-journal").addEventListener("click", () => {
+    if (!canEdit()) return;
+    if (!app.payments.length) return;
+    if (!confirm("Удалить все фактические платежи из журнала?")) return;
+    editingId = null;
+    document.getElementById("pay-submit").textContent = "Добавить";
+    document.getElementById("pay-cancel").hidden = true;
+    document.getElementById("pay-note").value = "";
+    app.deletedIds = SEEDED_PAYMENTS.map((p) => p.id);
+    app.payments = [];
+    save();
+    render();
+  });
+  document.getElementById("login-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setAuthError("");
+    try {
+      await api("/api/session", {
+        method: "POST",
+        body: JSON.stringify({ password: document.getElementById("login-password").value }),
+      });
+      editor = true;
+      document.getElementById("login-password").value = "";
+      updateAuthUi();
+      render();
+    } catch (error) {
+      setAuthError(error.message || "Неверный пароль.");
+    }
+  });
+  document.getElementById("logout").addEventListener("click", async () => {
+    try { await api("/api/session", { method: "DELETE" }); } catch (e) { /* выход локально всё равно закрывает правки */ }
+    editor = false;
+    updateAuthUi();
+    render();
+  });
+}
+
+async function start() {
+  fillForms();
+  render();
+  updateAuthUi();
+  boot();
+  try {
+    const [state, session] = await Promise.all([api("/api/state"), api("/api/session")]);
+    remote = true;
+    editor = !!session.editor;
+    applyRemoteState(state);
+  } catch (e) {
+    remote = false;
+    editor = true;
+  }
+  booting = false;
+  fillForms();
+  render();
+  updateAuthUi();
+}
+
+start();
+  </script>
+</body>
+</html>
