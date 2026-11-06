@@ -205,6 +205,7 @@ const DEFAULT_SETTINGS = {
   paymentDay: 4,
   dueRule: "lastBusinessDay",
   firstInterestStart: "2026-12-06",
+  smsStart: "2026-12-01",
   rate1: 10.9,
   rate2: 15,
   preferentialDays: 730,
@@ -350,9 +351,10 @@ function nextDue(c, after) {
 
 /** Проценты в копейках за [from, to). До rateChange — ставка 1, с rateChange — ставка 2. */
 function accrue(c, balance, from, to) {
-  if (balance <= 0 || cmp(to, from) <= 0) return 0;
+  const begin = later(from, c.firstInterestStart);
+  if (balance <= 0 || cmp(to, begin) <= 0) return 0;
   let kop = 0;
-  let cursor = from;
+  let cursor = begin;
   while (cmp(cursor, to) < 0) {
     let segEnd = to;
     let hundredths = c.rate2;
@@ -379,7 +381,7 @@ function rateLabel(c, rates) {
   return formatPercent(c.rate1);
 }
 function initState(c) {
-  return { balance: c.amountKop, date: c.firstInterestStart, cumInterest: 0, cumPaid: 0, cumSms: 0, unpaid: 0 };
+  return { balance: c.amountKop, date: c.start, cumInterest: 0, cumPaid: 0, cumSms: 0, unpaid: 0 };
 }
 function applyPayment(c, state, item) {
   const from = state.date;
@@ -398,11 +400,12 @@ function applyPayment(c, state, item) {
   state.cumPaid += applied;
   state.cumSms = (state.cumSms || 0) + sms;
   state.date = item.date;
-  const rates = periodRates(from, item.date, c.rateChange);
+  const accrualFrom = later(from, c.firstInterestStart);
+  const rates = periodRates(accrualFrom, item.date, c.rateChange);
   return {
     from,
     date: item.date,
-    days: daysBetween(from, item.date),
+    days: Math.max(0, daysBetween(accrualFrom, item.date)),
     interest,
     toInterest,
     toPrincipal,
@@ -451,6 +454,7 @@ function contractFrom(s) {
     paymentDay: s.paymentDay,
     dueRule: s.dueRule,
     firstInterestStart,
+    smsStart: parseISO(s.smsStart) || firstInterestStart,
     rate1: Math.round(s.rate1 * 100),
     rate2: Math.round(s.rate2 * 100),
     rateChange: addDays(start, s.preferentialDays),
@@ -518,7 +522,7 @@ function withMonthlySms(c, payments) {
     .sort((a, b) => cmp(a.date, b.date) || String(a.id).localeCompare(String(b.id)))
     .map((payment) => {
       const key = payment.date.y + "-" + pad(payment.date.m);
-      const smsKop = c.smsKop && !billed.has(key)
+      const smsKop = c.smsKop && cmp(payment.date, c.smsStart) >= 0 && !billed.has(key)
         ? Math.min(c.smsKop, payment.amountKop)
         : 0;
       if (smsKop) billed.add(key);
@@ -595,6 +599,7 @@ function sanitizeSettings(raw) {
       paymentDay,
       dueRule,
       firstInterestStart: d.firstInterestStart,
+      smsStart: d.smsStart,
       rate1,
       rate2,
       preferentialDays,

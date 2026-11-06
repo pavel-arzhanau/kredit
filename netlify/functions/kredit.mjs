@@ -158,6 +158,7 @@ function cleanSettings(raw) {
     paymentDay,
     dueRule,
     firstInterestStart,
+    smsStart: validDate(raw.smsStart) ? raw.smsStart : firstInterestStart,
     rate1,
     rate2,
     preferentialDays,
